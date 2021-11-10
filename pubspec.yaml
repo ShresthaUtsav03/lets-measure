@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   image_picker: ^0.8.4+4
   http: ^0.13.4
+  image_utils_class: ^2.0.0
   
 dev_dependencies:
   flutter_test:
@@ -76,16 +77,8 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
+
+  
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
