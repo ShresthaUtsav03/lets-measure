@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:lets_measure/views/graphic_input.dart';
 import 'package:lets_measure/views/home.dart';
+
+import 'constants.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,8 +14,18 @@ class LetsMeasure extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: 'Lets Measure', initialRoute: '/home', routes: {
-      '/home': (context) => const Home(),
-    });
+    return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Lets Measure',
+        theme: ThemeData(
+            fontFamily: "Cairo",
+            scaffoldBackgroundColor: kBackgroundColor,
+            textTheme:
+                Theme.of(context).textTheme.apply(displayColor: kTextColor)),
+        initialRoute: '/home',
+        routes: {
+          '/home': (context) => const HomeScreen(),
+          '/graphicInput': (context) => const Home(),
+        });
   }
 }

@@ -1,139 +1,99 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:lets_measure/widgets/build_button.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_svg/svg.dart';
+import 'package:lets_measure/views/details_screen.dart';
+import 'package:lets_measure/views/graphic_input.dart';
+import 'package:lets_measure/widgets/category_card.dart';
+import 'package:lets_measure/widgets/search_bar.dart';
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
-
-  @override
-  State<Home> createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  bool received = false;
-  File? image;
-  String server = "http://6c4e-110-44-127-181.ngrok.io/";
-
-  String message = "";
-  String resultImage = "";
-  late List<dynamic> size;
-  Widget imageOutput = FlutterLogo();
-
-  late String base64;
-
-  showImage(String encodedImage) {
-    return Image.memory(
-      base64Decode(resultImage),
-      height: 120,
-      width: 120,
-    );
-  }
-
-  void displayResponseImage() async {
-    Uint8List convertedBytes = base64Decode(resultImage);
-    //print("The uint8list is:" + resultImage);
-    imageOutput = Container(
-      width: 120,
-      height: 120,
-      child: Image.memory(
-        convertedBytes,
-        fit: BoxFit.cover,
-      ),
-    );
-  }
-
-  uploadImage() async {
-    print("connecting to server" + server);
-    var request = http.MultipartRequest(
-      'POST',
-      Uri.parse(server + "object_measurement_rectangle"),
-    );
-    Map<String, String> headers = {"Content-type": "multipart/form-data"};
-    request.files.add(
-      http.MultipartFile(
-        'image',
-        image!.readAsBytes().asStream(),
-        image!.lengthSync(),
-        filename: "filename",
-        //contentType: MediaType('image', 'jpeg'),
-      ),
-    );
-    request.headers.addAll(headers);
-    //print("request: " + request.toString());
-    final response = await request.send();
-
-    http.Response res = await http.Response.fromStream(response);
-    final resJson = jsonDecode(res.body);
-    received = true;
-
-    message = resJson['message'];
-    resultImage = resJson['image'];
-
-    print(resultImage);
-
-    //displayResponseImage();
-    setState(() {});
-    //final decodedBytes = base64Decode(resultImage);
-    // base64 = resultImage.toString();
-    // try {
-    //   print("The code is:" + resultImage);
-    // } catch (e) {
-    //   print(e.toString());
-    // }
-
-    // var file = File("decodedImage.jpg");
-    // file.writeAsBytesSync(decodedBytes);
-  }
-
-  Future pickImage(ImageSource source) async {
-    try {
-      final image = await ImagePicker().pickImage(source: source);
-      if (image == null) {
-        return;
-      }
-      final imageTemporary = File(image.path);
-      setState(() {
-        this.image = imageTemporary;
-      });
-    } on PlatformException catch (e) {}
-  }
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Spacer(),
-        imageOutput,
-        image != null
-            ? Image.file(
-                image!,
-                width: 40,
-                height: 40,
-                fit: BoxFit.cover,
-              )
-            : const FlutterLogo(size: 160),
-        const Text('Selected Image'),
-        BuildButton(
-          title: 'Pick Image',
-          icon: Icons.image_outlined,
-          onClicked: () => pickImage(ImageSource.gallery),
-        ),
-        const SizedBox(height: 24),
-        BuildButton(
-          title: 'Camera',
-          icon: Icons.camera_alt_outlined,
-          onClicked: () => pickImage(ImageSource.camera),
-        ),
-        const Spacer(),
-        BuildButton(
-            title: 'Next', icon: Icons.chevron_right, onClicked: uploadImage)
-      ],
+    var size = MediaQuery.of(context)
+        .size; //this gonna give us total height and with of our device
+    return Scaffold(
+      //bottomNavigationBar: BottomNavBar(),
+      body: Stack(
+        children: <Widget>[
+          Container(
+            // Here the height of the container is 45% of our total height
+            height: size.height * .45,
+            decoration: const BoxDecoration(
+              color: Color(0xFFF5CEB8),
+              image: DecorationImage(
+                alignment: Alignment.centerLeft,
+                image: AssetImage("assets/images/undraw_pilates_gpdb.png"),
+              ),
+            ),
+          ),
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: 52,
+                      width: 52,
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFF2BEA1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: SvgPicture.asset("assets/icons/menu.svg"),
+                    ),
+                  ),
+                  Text("Welcome \nSaurav",
+                      style: Theme.of(context).textTheme.headline3
+                      //.copyWith(fontWeight: FontWeight.w900),
+                      ),
+                  SearchBar(),
+                  Expanded(
+                    child: GridView.count(
+                      crossAxisCount: 2,
+                      childAspectRatio: .85,
+                      crossAxisSpacing: 20,
+                      mainAxisSpacing: 20,
+                      children: <Widget>[
+                        CategoryCard(
+                          title: "Measure Dimensions",
+                          svgSrc: "assets/icons/Hamburger.svg",
+                          press: () {},
+                        ),
+                        CategoryCard(
+                          title: "Detect Color",
+                          svgSrc: "assets/icons/Excrecises.svg",
+                          press: () {},
+                        ),
+                        CategoryCard(
+                          title: "Measure Angle",
+                          svgSrc: "assets/icons/Meditation.svg",
+                          press: () {
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(builder: (context) {
+                            //     return DetailsScreen();
+                            //   }),
+                            // );
+                          },
+                        ),
+                        CategoryCard(
+                          title: "Compass \nand Level ",
+                          svgSrc: "assets/icons/yoga.svg",
+                          press: () {},
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
