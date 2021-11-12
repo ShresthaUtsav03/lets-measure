@@ -18,7 +18,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   bool received = false;
   File? image;
-  String server = "http://6c4e-110-44-127-181.ngrok.io/";
+  String server = "http://2565-110-44-116-42.ngrok.io/";
 
   String message = "";
   String resultImage = "";
@@ -74,7 +74,7 @@ class _HomeState extends State<Home> {
 
     message = resJson['message'];
     resultImage = resJson['image'];
-
+    displayResponseImage();
     print(resultImage);
 
     //displayResponseImage();

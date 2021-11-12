@@ -1,15 +1,70 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lets_measure/constants.dart';
 import 'package:lets_measure/widgets/bottom_nav_bar.dart';
+import 'package:lets_measure/widgets/build_button.dart';
 import 'package:lets_measure/widgets/search_bar.dart';
 
-class DetailsScreen extends StatelessWidget {
+class DetailsScreen extends StatefulWidget {
+  @override
+  State<DetailsScreen> createState() => _DetailsScreenState();
+}
+
+class _DetailsScreenState extends State<DetailsScreen> {
+  bool imageReceived = false;
+
+  File? image;
+
+  String server = "http://6c4e-110-44-127-181.ngrok.io/";
+
+  void uploadImage() async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(server + "object_measurement_rectangle"),
+      );
+      Map<String, String> headers = {"Content-type": "multipart/form-data"};
+      request.files.add(
+        http.MultipartFile(
+          'image',
+          image!.readAsBytes().asStream(),
+          image!.lengthSync(),
+          filename: "filename",
+        ),
+      );
+      request.headers.addAll(headers);
+      final response = await request.send();
+
+      http.Response res = await http.Response.fromStream(response);
+      final resJson = jsonDecode(res.body);
+      print(resJson['image']);
+    } catch (e) {
+      setState(() {});
+    }
+    imageReceived = true;
+  }
+
+  Future pickImage(ImageSource source) async {
+    final image = await ImagePicker().pickImage(source: source);
+    if (image == null) {
+      return;
+    }
+    final imageTemporary = File(image.path);
+    setState(() {
+      this.image = imageTemporary;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      bottomNavigationBar: BottomNavBar(),
+      //bottomNavigationBar: BottomNavBar(),
       body: Stack(
         children: <Widget>[
           Container(
@@ -29,6 +84,22 @@ class DetailsScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
+                    BuildButton(
+                      title: 'Pick Image',
+                      icon: Icons.image_outlined,
+                      onClicked: () => pickImage(ImageSource.gallery),
+                    ),
+                    const SizedBox(height: 24),
+                    BuildButton(
+                      title: 'Camera',
+                      icon: Icons.camera_alt_outlined,
+                      onClicked: () => pickImage(ImageSource.camera),
+                    ),
+                    const Spacer(),
+                    BuildButton(
+                        title: 'Next',
+                        icon: Icons.chevron_right,
+                        onClicked: uploadImage),
                     SizedBox(
                       height: size.height * 0.05,
                     ),
@@ -65,22 +136,6 @@ class DetailsScreen extends StatelessWidget {
                           seassionNum: 2,
                           press: () {},
                         ),
-                        SeassionCard(
-                          seassionNum: 3,
-                          press: () {},
-                        ),
-                        SeassionCard(
-                          seassionNum: 4,
-                          press: () {},
-                        ),
-                        SeassionCard(
-                          seassionNum: 5,
-                          press: () {},
-                        ),
-                        SeassionCard(
-                          seassionNum: 6,
-                          press: () {},
-                        ),
                       ],
                     ),
                     SizedBox(height: 20),
@@ -99,7 +154,7 @@ class DetailsScreen extends StatelessWidget {
                           BoxShadow(
                             offset: Offset(0, 17),
                             blurRadius: 23,
-                            spreadRadius: -13,
+                            spreadRadius: 13,
                             color: kShadowColor,
                           ),
                         ],
@@ -158,8 +213,8 @@ class SeassionCard extends StatelessWidget {
       return ClipRRect(
         borderRadius: BorderRadius.circular(13),
         child: Container(
-          width: constraint.maxWidth / 2 -
-              10, // constraint.maxWidth provide us the available with for this widget
+          width: constraint.maxWidth /
+              2, // constraint.maxWidth provide us the available with for this widget
           // padding: EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: Colors.white,

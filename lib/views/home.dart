@@ -46,11 +46,11 @@ class HomeScreen extends StatelessWidget {
                       child: SvgPicture.asset("assets/icons/menu.svg"),
                     ),
                   ),
-                  Text("Welcome \nSaurav",
+                  Text("Let's \nMeasure!",
                       style: Theme.of(context).textTheme.headline3
                       //.copyWith(fontWeight: FontWeight.w900),
                       ),
-                  SearchBar(),
+                  SizedBox(height: 40),
                   Expanded(
                     child: GridView.count(
                       crossAxisCount: 2,
@@ -61,29 +61,22 @@ class HomeScreen extends StatelessWidget {
                         CategoryCard(
                           title: "Measure Dimensions",
                           svgSrc: "assets/icons/Hamburger.svg",
-                          press: () {},
+                          selectedOption: 'Dimension',
                         ),
                         CategoryCard(
                           title: "Detect Color",
                           svgSrc: "assets/icons/Excrecises.svg",
-                          press: () {},
+                          selectedOption: 'Color',
                         ),
                         CategoryCard(
                           title: "Measure Angle",
                           svgSrc: "assets/icons/Meditation.svg",
-                          press: () {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(builder: (context) {
-                            //     return DetailsScreen();
-                            //   }),
-                            // );
-                          },
+                          selectedOption: 'Angle',
                         ),
                         CategoryCard(
                           title: "Compass \nand Level ",
                           svgSrc: "assets/icons/yoga.svg",
-                          press: () {},
+                          selectedOption: 'Compass',
                         ),
                       ],
                     ),

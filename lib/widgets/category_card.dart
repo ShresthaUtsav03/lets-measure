@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lets_measure/views/graphic_input.dart';
 
 import '../constants.dart';
 
 class CategoryCard extends StatelessWidget {
   final String svgSrc;
   final String title;
-  final Function press;
+  final String selectedOption;
   const CategoryCard({
     Key? key,
     required this.svgSrc,
     required this.title,
-    required this.press,
+    required this.selectedOption,
   }) : super(key: key);
 
   @override
@@ -35,7 +36,14 @@ class CategoryCard extends StatelessWidget {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            onTap: press(),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) {
+                  return Home();
+                }),
+              );
+            },
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
