@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:lets_measure/views/details_screen.dart';
-import 'package:lets_measure/views/graphic_input.dart';
 import 'package:lets_measure/widgets/category_card.dart';
-import 'package:lets_measure/widgets/search_bar.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);

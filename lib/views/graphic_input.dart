@@ -5,6 +5,9 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lets_measure/constants.dart';
+import 'package:lets_measure/error_dialog.dart';
+import 'package:lets_measure/views/home.dart';
 import 'package:lets_measure/widgets/build_button.dart';
 import 'package:http/http.dart' as http;
 
@@ -18,63 +21,64 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   bool received = false;
   File? image;
-  String server = "http://2565-110-44-116-42.ngrok.io/";
+  String errorMsg = "";
 
   String message = "";
   String resultImage = "";
   late List<dynamic> size;
-  Widget imageOutput = FlutterLogo();
+  Widget imageOutput = const FlutterLogo();
 
   late String base64;
 
-  showImage(String encodedImage) {
-    return Image.memory(
-      base64Decode(resultImage),
-      height: 120,
-      width: 120,
-    );
-  }
-
   void displayResponseImage() async {
-    Uint8List convertedBytes = base64Decode(resultImage);
-    //print("The uint8list is:" + resultImage);
-    imageOutput = Container(
-      width: 120,
-      height: 120,
-      child: Image.memory(
-        convertedBytes,
-        fit: BoxFit.cover,
-      ),
-    );
+    try {
+      Uint8List convertedBytes = base64Decode(resultImage);
+      //print("The uint8list is:" + resultImage);
+      imageOutput = Container(
+        width: 120,
+        height: 120,
+        child: Image.memory(
+          convertedBytes,
+          fit: BoxFit.cover,
+        ),
+      );
+    } catch (e) {
+      errorMsg = e.toString();
+      showErrorDialog(context, errorMsg);
+    }
   }
 
   uploadImage() async {
-    print("connecting to server" + server);
-    var request = http.MultipartRequest(
-      'POST',
-      Uri.parse(server + "object_measurement_rectangle"),
-    );
-    Map<String, String> headers = {"Content-type": "multipart/form-data"};
-    request.files.add(
-      http.MultipartFile(
-        'image',
-        image!.readAsBytes().asStream(),
-        image!.lengthSync(),
-        filename: "filename",
-        //contentType: MediaType('image', 'jpeg'),
-      ),
-    );
-    request.headers.addAll(headers);
-    //print("request: " + request.toString());
-    final response = await request.send();
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(kApiUrl + "object_measurement_rectangle"),
+      );
+      Map<String, String> headers = {"Content-type": "multipart/form-data"};
+      request.files.add(
+        http.MultipartFile(
+          'image',
+          image!.readAsBytes().asStream(),
+          image!.lengthSync(),
+          filename: "filename",
+          //contentType: MediaType('image', 'jpeg'),
+        ),
+      );
+      request.headers.addAll(headers);
+      //print("request: " + request.toString());
+      final response = await request.send();
 
-    http.Response res = await http.Response.fromStream(response);
-    final resJson = jsonDecode(res.body);
-    received = true;
+      http.Response res = await http.Response.fromStream(response);
+      final resJson = jsonDecode(res.body);
+      received = true;
 
-    message = resJson['message'];
-    resultImage = resJson['image'];
-    displayResponseImage();
+      message = resJson['message'];
+      resultImage = resJson['image'];
+      displayResponseImage();
+    } catch (e) {
+      errorMsg = e.toString();
+      showErrorDialog(context, errorMsg);
+    }
     print(resultImage);
 
     //displayResponseImage();
@@ -101,7 +105,10 @@ class _HomeState extends State<Home> {
       setState(() {
         this.image = imageTemporary;
       });
-    } on PlatformException catch (e) {}
+    } on PlatformException catch (e) {
+      errorMsg = e.toString();
+      showErrorDialog(context, errorMsg);
+    }
   }
 
   @override

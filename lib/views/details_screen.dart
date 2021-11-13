@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lets_measure/constants.dart';
 import 'package:lets_measure/widgets/bottom_nav_bar.dart';
+
 import 'package:lets_measure/widgets/build_button.dart';
 import 'package:lets_measure/widgets/search_bar.dart';
 
@@ -20,13 +21,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   File? image;
 
-  String server = "http://6c4e-110-44-127-181.ngrok.io/";
-
   void uploadImage() async {
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse(server + "object_measurement_rectangle"),
+        Uri.parse(kApiUrl + "object_measurement_rectangle"),
       );
       Map<String, String> headers = {"Content-type": "multipart/form-data"};
       request.files.add(
