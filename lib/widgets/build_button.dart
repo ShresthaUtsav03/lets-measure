@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lets_measure/constants.dart';
 
 class BuildButton extends StatelessWidget {
   final String title;
@@ -18,7 +19,9 @@ class BuildButton extends StatelessWidget {
       onPressed: onClicked,
       icon: Icon(icon, size: 28, color: Colors.white),
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(Colors.blue),
+        backgroundColor: MaterialStateProperty.all(kBlueColor),
+        //shadowColor: MaterialStateProperty.all(kShadowColor),
+        elevation: MaterialStateProperty.all(3),
       ),
       label: Text(
         title,

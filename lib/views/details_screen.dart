@@ -6,20 +6,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lets_measure/constants.dart';
-import 'package:lets_measure/widgets/bottom_nav_bar.dart';
 
 import 'package:lets_measure/widgets/build_button.dart';
 import 'package:lets_measure/widgets/search_bar.dart';
 
 class DetailsScreen extends StatefulWidget {
+  const DetailsScreen({Key? key}) : super(key: key);
+
   @override
   State<DetailsScreen> createState() => _DetailsScreenState();
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
   bool imageReceived = false;
-
   File? image;
+  String errorMsg = "";
 
   void uploadImage() async {
     try {
@@ -41,7 +42,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
       http.Response res = await http.Response.fromStream(response);
       final resJson = jsonDecode(res.body);
-      print(resJson['image']);
+      //print(resJson['image']);
     } catch (e) {
       setState(() {});
     }
@@ -106,21 +107,21 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         style: Theme.of(context).textTheme.headline3
                         //.copyWith(fontWeight: FontWeight.w900),
                         ),
-                    SizedBox(height: 10),
-                    Text(
+                    const SizedBox(height: 10),
+                    const Text(
                       "3-10 MIN Course",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     SizedBox(
                       width: size.width * .6, // it just take 60% of total width
-                      child: Text(
+                      child: const Text(
                         "Live happier and healthier by learning the fundamentals of meditation and mindfulness",
                       ),
                     ),
                     SizedBox(
                       width: size.width * .5, // it just take the 50% width
-                      child: SearchBar(),
+                      child: const SearchBar(),
                     ),
                     Wrap(
                       spacing: 20,
@@ -137,14 +138,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Text("Meditation",
                         style: Theme.of(context).textTheme.headline3
                         //.copyWith(fontWeight: FontWeight.bold),
                         ),
                     Container(
-                      margin: EdgeInsets.symmetric(vertical: 20),
-                      padding: EdgeInsets.all(10),
+                      margin: const EdgeInsets.symmetric(vertical: 20),
+                      padding: const EdgeInsets.all(10),
                       height: 90,
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -248,7 +249,7 @@ class SeassionCard extends StatelessWidget {
                         color: isDone ? Colors.white : kBlueColor,
                       ),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Text(
                       "Session $seassionNum",
                       style: Theme.of(context).textTheme.subtitle1,

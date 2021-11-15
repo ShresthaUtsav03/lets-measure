@@ -6,16 +6,16 @@ Future<void> showErrorDialog(BuildContext context, String errorMsg) {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('Alert'),
+        title: const Text('Alert'),
         content: Text(errorMsg),
         actions: <Widget>[
-          FlatButton(
-            child: Text('Ok'),
+          TextButton(
+            child: const Text('Ok'),
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => HomeScreen(),
+                  builder: (context) => const HomeScreen(),
                 ),
               );
             },

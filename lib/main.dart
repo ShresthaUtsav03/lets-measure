@@ -27,7 +27,7 @@ class LetsMeasure extends StatelessWidget {
         routes: {
           '/home': (context) => const HomeScreen(),
           '/imageInput': (context) => const Home(),
-          '/meditation': (context) => DetailsScreen(),
+          '/meditation': (context) => const DetailsScreen(),
         });
   }
 }

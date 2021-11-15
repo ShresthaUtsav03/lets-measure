@@ -8,8 +8,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:lets_measure/constants.dart';
 import 'package:lets_measure/error_dialog.dart';
 import 'package:lets_measure/views/home.dart';
+import 'package:lets_measure/views/image_output.dart';
 import 'package:lets_measure/widgets/build_button.dart';
 import 'package:http/http.dart' as http;
+import 'package:lets_measure/widgets/loading.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -19,9 +21,11 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  bool imageSelected = false;
   bool received = false;
   File? image;
   String errorMsg = "";
+  Widget next = SizedBox();
 
   String message = "";
   String resultImage = "";
@@ -102,8 +106,10 @@ class _HomeState extends State<Home> {
         return;
       }
       final imageTemporary = File(image.path);
+
       setState(() {
         this.image = imageTemporary;
+        imageSelected = true;
       });
     } on PlatformException catch (e) {
       errorMsg = e.toString();
@@ -114,34 +120,74 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    return Column(
-      children: [
-        const Spacer(),
-        imageOutput,
-        image != null
-            ? Image.file(
-                image!,
-                width: 40,
-                height: 40,
-                fit: BoxFit.cover,
-              )
-            : const FlutterLogo(size: 160),
-        const Text('Selected Image'),
-        BuildButton(
-          title: 'Pick Image',
-          icon: Icons.image_outlined,
-          onClicked: () => pickImage(ImageSource.gallery),
-        ),
-        const SizedBox(height: 24),
-        BuildButton(
-          title: 'Camera',
-          icon: Icons.camera_alt_outlined,
-          onClicked: () => pickImage(ImageSource.camera),
-        ),
-        const Spacer(),
-        BuildButton(
-            title: 'Next', icon: Icons.chevron_right, onClicked: uploadImage)
-      ],
+    return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+          backgroundColor: kBlueColor,
+          heroTag: 'uniqueTag',
+          label: Row(
+            children: [
+              Text('Next'),
+              Icon(Icons.verified_outlined),
+            ],
+          ),
+          onPressed: () {
+            imageSelected
+                ? Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return ImageOutput();
+                  }))
+                : () {};
+          }),
+      body: Stack(
+        children: <Widget>[
+          Container(
+            height: size.height * .45,
+            decoration: BoxDecoration(
+              color: kBlueLightColor,
+              image: DecorationImage(
+                image: AssetImage("assets/images/meditation_bg.png"),
+                fit: BoxFit.fitWidth,
+              ),
+            ),
+          ),
+          SafeArea(
+            child: Column(
+              children: [
+                Text(
+                  "Measure Dimensions",
+                  style: Theme.of(context).textTheme.headline3,
+                  //.copyWith(fontWeight: FontWeight.w900),
+                ),
+                const SizedBox(height: 24),
+                BuildButton(
+                  title: 'Pick Image',
+                  icon: Icons.image_outlined,
+                  onClicked: () => pickImage(ImageSource.gallery),
+                ),
+                const SizedBox(height: 24),
+                BuildButton(
+                  title: 'Camera',
+                  icon: Icons.camera_alt_outlined,
+                  onClicked: () => pickImage(ImageSource.camera),
+                ),
+                const SizedBox(height: 14),
+                image != null
+                    ? Image.file(
+                        image!,
+                        width: size.width * 0.97,
+                        height: size.height * 0.55,
+
+                        //fit: BoxFit.fitHeight,
+                      )
+                    : const SizedBox(
+                        child: Center(
+                          child: Text('Image selected will be show here'),
+                        ),
+                      ),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }
