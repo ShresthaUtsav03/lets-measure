@@ -42,7 +42,7 @@ class CategoryCard extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) {
-                  return Home();
+                  return ImageInputScreen();
                 }),
               );
             },

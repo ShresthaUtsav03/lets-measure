@@ -6,21 +6,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lets_measure/constants.dart';
-import 'package:lets_measure/error_dialog.dart';
-import 'package:lets_measure/views/home.dart';
+import 'package:lets_measure/widgets/error_dialog.dart';
 import 'package:lets_measure/views/image_output.dart';
 import 'package:lets_measure/widgets/build_button.dart';
 import 'package:http/http.dart' as http;
-import 'package:lets_measure/widgets/loading.dart';
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+class ImageInputScreen extends StatefulWidget {
+  const ImageInputScreen({Key? key}) : super(key: key);
 
   @override
-  State<Home> createState() => _HomeState();
+  State<ImageInputScreen> createState() => _ImageInputScreenState();
 }
 
-class _HomeState extends State<Home> {
+class _ImageInputScreenState extends State<ImageInputScreen> {
   bool imageSelected = false;
   bool received = false;
   File? image;

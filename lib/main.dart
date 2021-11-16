@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lets_measure/views/details_screen.dart';
 import 'package:lets_measure/views/graphic_input.dart';
 import 'package:lets_measure/views/home.dart';
 
@@ -26,8 +25,7 @@ class LetsMeasure extends StatelessWidget {
         initialRoute: '/home',
         routes: {
           '/home': (context) => const HomeScreen(),
-          '/imageInput': (context) => const Home(),
-          '/meditation': (context) => const DetailsScreen(),
+          '/imageInput': (context) => const ImageInputScreen(),
         });
   }
 }
