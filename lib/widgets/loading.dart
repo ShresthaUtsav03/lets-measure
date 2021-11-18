@@ -8,9 +8,16 @@ class Loading extends StatelessWidget {
     return Container(
       color: Colors.grey[750],
       child: Center(
-        child: SpinKitWave(
-          color: kBlueLightColor,
-          size: 100.0,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SpinKitWave(
+              color: kBlueLightColor,
+              size: 100.0,
+            ),
+            Text('Your image is being processed!',
+                style: Theme.of(context).textTheme.bodyText1),
+          ],
         ),
       ),
     );

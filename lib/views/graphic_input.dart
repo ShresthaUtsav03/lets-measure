@@ -1,7 +1,4 @@
-import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -9,7 +6,6 @@ import 'package:lets_measure/constants.dart';
 import 'package:lets_measure/widgets/error_dialog.dart';
 import 'package:lets_measure/views/image_output.dart';
 import 'package:lets_measure/widgets/build_button.dart';
-import 'package:http/http.dart' as http;
 
 class ImageInputScreen extends StatefulWidget {
   const ImageInputScreen({Key? key}) : super(key: key);
@@ -20,82 +16,9 @@ class ImageInputScreen extends StatefulWidget {
 
 class _ImageInputScreenState extends State<ImageInputScreen> {
   bool imageSelected = false;
-  bool received = false;
   File? image;
   String errorMsg = "";
   Widget next = SizedBox();
-
-  String message = "";
-  String resultImage = "";
-  late List<dynamic> size;
-  Widget imageOutput = const FlutterLogo();
-
-  late String base64;
-
-  void displayResponseImage() async {
-    try {
-      Uint8List convertedBytes = base64Decode(resultImage);
-      //print("The uint8list is:" + resultImage);
-      imageOutput = Container(
-        width: 120,
-        height: 120,
-        child: Image.memory(
-          convertedBytes,
-          fit: BoxFit.cover,
-        ),
-      );
-    } catch (e) {
-      errorMsg = e.toString();
-      showErrorDialog(context, errorMsg);
-    }
-  }
-
-  uploadImage() async {
-    try {
-      var request = http.MultipartRequest(
-        'POST',
-        Uri.parse(kApiUrl + "object_measurement_rectangle"),
-      );
-      Map<String, String> headers = {"Content-type": "multipart/form-data"};
-      request.files.add(
-        http.MultipartFile(
-          'image',
-          image!.readAsBytes().asStream(),
-          image!.lengthSync(),
-          filename: "filename",
-          //contentType: MediaType('image', 'jpeg'),
-        ),
-      );
-      request.headers.addAll(headers);
-      //print("request: " + request.toString());
-      final response = await request.send();
-
-      http.Response res = await http.Response.fromStream(response);
-      final resJson = jsonDecode(res.body);
-      received = true;
-
-      message = resJson['message'];
-      resultImage = resJson['image'];
-      displayResponseImage();
-    } catch (e) {
-      errorMsg = e.toString();
-      showErrorDialog(context, errorMsg);
-    }
-    print(resultImage);
-
-    //displayResponseImage();
-    setState(() {});
-    //final decodedBytes = base64Decode(resultImage);
-    // base64 = resultImage.toString();
-    // try {
-    //   print("The code is:" + resultImage);
-    // } catch (e) {
-    //   print(e.toString());
-    // }
-
-    // var file = File("decodedImage.jpg");
-    // file.writeAsBytesSync(decodedBytes);
-  }
 
   Future pickImage(ImageSource source) async {
     try {
@@ -124,14 +47,14 @@ class _ImageInputScreenState extends State<ImageInputScreen> {
           heroTag: 'uniqueTag',
           label: Row(
             children: [
-              Text('Next'),
-              Icon(Icons.verified_outlined),
+              const Text('Next'),
+              const Icon(Icons.verified_outlined),
             ],
           ),
           onPressed: () {
             imageSelected
                 ? Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return ImageOutput();
+                    return ImageOutput(image: image);
                   }))
                 : () {};
           }),
@@ -150,18 +73,21 @@ class _ImageInputScreenState extends State<ImageInputScreen> {
           SafeArea(
             child: Column(
               children: [
-                Text(
-                  "Measure Dimensions",
-                  style: Theme.of(context).textTheme.headline3,
-                  //.copyWith(fontWeight: FontWeight.w900),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Text(
+                    "Measure Dimensions",
+                    style: Theme.of(context).textTheme.headline3,
+                    //.copyWith(fontWeight: FontWeight.w900),
+                  ),
                 ),
-                const SizedBox(height: 24),
+                // const SizedBox(height: 24),
                 BuildButton(
                   title: 'Pick Image',
                   icon: Icons.image_outlined,
                   onClicked: () => pickImage(ImageSource.gallery),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 14),
                 BuildButton(
                   title: 'Camera',
                   icon: Icons.camera_alt_outlined,
@@ -172,13 +98,13 @@ class _ImageInputScreenState extends State<ImageInputScreen> {
                     ? Image.file(
                         image!,
                         width: size.width * 0.97,
-                        height: size.height * 0.55,
+                        height: size.height * 0.45,
 
                         //fit: BoxFit.fitHeight,
                       )
                     : const SizedBox(
                         child: Center(
-                          child: Text('Image selected will be show here'),
+                          child: Text('Image selected will be shown here'),
                         ),
                       ),
               ],

@@ -51,7 +51,10 @@ class CategoryCard extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   const Spacer(),
-                  SvgPicture.asset(svgSrc),
+                  SvgPicture.asset(
+                    svgSrc,
+                    height: 60,
+                  ),
                   const Spacer(),
                   Text(title,
                       textAlign: TextAlign.center,

@@ -62,7 +62,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                         CategoryCard(
                           title: "Detect Color",
-                          svgSrc: "assets/icons/Excrecises.svg",
+                          svgSrc: "assets/icons/gym.svg",
                           selectedOption: 'Color',
                         ),
                         CategoryCard(
