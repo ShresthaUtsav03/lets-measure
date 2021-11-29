@@ -15,18 +15,10 @@ class ImageInputScreen extends StatefulWidget {
   State<ImageInputScreen> createState() => _ImageInputScreenState();
 }
 
-enum AppState {
-  free,
-  picked,
-  cropped,
-}
-
 class _ImageInputScreenState extends State<ImageInputScreen> {
   bool imageSelected = false;
   File? image;
   String errorMsg = "";
-  Widget next = SizedBox();
-  late AppState state = AppState.free;
 
   Future pickImage(ImageSource source) async {
     try {
@@ -39,7 +31,6 @@ class _ImageInputScreenState extends State<ImageInputScreen> {
       setState(() {
         this.image = imageTemporary;
         imageSelected = true;
-        state = AppState.picked;
       });
     } on PlatformException catch (e) {
       errorMsg = e.toString();
@@ -79,9 +70,7 @@ class _ImageInputScreenState extends State<ImageInputScreen> {
         ));
     if (croppedFile != null) {
       image = croppedFile;
-      setState(() {
-        state = AppState.cropped;
-      });
+      setState(() {});
     }
   }
 
@@ -163,7 +152,8 @@ class _ImageInputScreenState extends State<ImageInputScreen> {
                           ],
                         ),
                       )
-                    : const SizedBox(
+                    : SizedBox(
+                        height: size.height * 0.45,
                         child: Center(
                           child: Text('Image selected will be shown here'),
                         ),
