@@ -7,4 +7,4 @@ const kBlueLightColor = Color(0xFFC7B8F5);
 const kBlueColor = Color(0xFF817DC0);
 const kShadowColor = Color(0xFFE6E6E6);
 const String kApiUrl =
-    'http://fa06-2400-1a00-b040-a323-844d-c0c9-2c39-81ed.ngrok.io/';
+    'http://18ce-2400-1a00-b040-7328-4c3b-7f26-7f28-ac20.ngrok.io/';
