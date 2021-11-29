@@ -30,34 +30,37 @@ class _ImageOutputState extends State<ImageOutput> {
   }
 
   uploadImage() async {
-    var request = http.MultipartRequest(
-      'POST',
-      Uri.parse(kApiUrl + "object_measurement_rectangle"),
-    );
-    Map<String, String> headers = {"Content-type": "multipart/form-data"};
-    request.files.add(
-      http.MultipartFile(
-        'image',
-        widget.image!.readAsBytes().asStream(),
-        widget.image!.lengthSync(),
-        filename: "filename",
-        //contentType: MediaType('image', 'jpeg'),
-      ),
-    );
-    request.headers.addAll(headers);
-    //print("request: " + request.toString());
-    final response = await request.send();
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(kApiUrl + "object_measurement_rectangle"),
+      );
+      print("Connecting to " + kApiUrl);
+      Map<String, String> headers = {"Content-type": "multipart/form-data"};
+      request.files.add(
+        http.MultipartFile(
+          'image',
+          widget.image!.readAsBytes().asStream(),
+          widget.image!.lengthSync(),
+          filename: "filename",
+          //contentType: MediaType('image', 'jpeg'),
+        ),
+      );
+      request.headers.addAll(headers);
+      //print("request: " + request.toString());
+      final response = await request.send();
 
-    http.Response res = await http.Response.fromStream(response);
-    final resJson = jsonDecode(res.body);
-    loading = false;
+      http.Response res = await http.Response.fromStream(response);
+      final resJson = jsonDecode(res.body);
+      loading = false;
 
-    message = resJson['message'];
-    resultImage = resJson['image'];
-    displayResponseImage();
-
-    // errorMsg = e.toString();
-    // showErrorDialog(context, errorMsg);
+      message = resJson['message'];
+      resultImage = resJson['image'];
+      displayResponseImage();
+    } catch (e) {
+      errorMsg = e.toString();
+      showErrorDialog(context, errorMsg);
+    }
 
     print(resultImage);
 
@@ -106,7 +109,11 @@ class _ImageOutputState extends State<ImageOutput> {
         backgroundColor: kBlueLightColor,
         foregroundColor: kTextColor,
       ),
-      body: SafeArea(child: loading ? Loading() : Center(child: imageOutput)),
+      body: SafeArea(
+          child: loading
+              ? Loading()
+              : InteractiveViewer(
+                  panEnabled: true, child: Center(child: imageOutput))),
     );
   }
 }

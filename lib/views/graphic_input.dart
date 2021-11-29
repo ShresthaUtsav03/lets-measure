@@ -65,7 +65,7 @@ class _ImageInputScreenState extends State<ImageInputScreen> {
             decoration: BoxDecoration(
               color: kBlueLightColor,
               image: DecorationImage(
-                image: AssetImage("assets/images/meditation_bg.png"),
+                image: AssetImage("assets/images/tape_bg.png"),
                 fit: BoxFit.fitWidth,
               ),
             ),

@@ -57,22 +57,22 @@ class HomeScreen extends StatelessWidget {
                       children: <Widget>[
                         CategoryCard(
                           title: "Measure Dimensions",
-                          svgSrc: "assets/icons/Hamburger.svg",
+                          svgSrc: "assets/icons/Scales.svg",
                           selectedOption: 'Dimension',
                         ),
                         CategoryCard(
                           title: "Detect Color",
-                          svgSrc: "assets/icons/gym.svg",
+                          svgSrc: "assets/icons/Color.svg",
                           selectedOption: 'Color',
                         ),
                         CategoryCard(
                           title: "Measure Angle",
-                          svgSrc: "assets/icons/Meditation.svg",
+                          svgSrc: "assets/icons/Angle.svg",
                           selectedOption: 'Angle',
                         ),
                         CategoryCard(
                           title: "Compass \nand Level ",
-                          svgSrc: "assets/icons/yoga.svg",
+                          svgSrc: "assets/icons/Compass1.svg",
                           selectedOption: 'Compass',
                         ),
                       ],
