@@ -10,7 +10,8 @@ import 'package:lets_measure/widgets/loading.dart';
 
 class ImageOutput extends StatefulWidget {
   File? image;
-  ImageOutput({this.image});
+  final String title;
+  ImageOutput({required this.image, required this.title});
 
   @override
   State<ImageOutput> createState() => _ImageOutputState();
@@ -33,7 +34,7 @@ class _ImageOutputState extends State<ImageOutput> {
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse(kApiUrl + "object_measurement_rectangle"),
+        Uri.parse(kApiUrl + "object_measurement_circle"),
       );
       print("Connecting to " + kApiUrl);
       Map<String, String> headers = {"Content-type": "multipart/form-data"};
@@ -56,6 +57,9 @@ class _ImageOutputState extends State<ImageOutput> {
 
       message = resJson['message'];
       resultImage = resJson['image'];
+      if (widget.title == 'Circle Measure') {
+        print(resJson['no_of_circles']);
+      }
       displayResponseImage();
     } catch (e) {
       errorMsg = e.toString();

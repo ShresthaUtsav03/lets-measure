@@ -3,13 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lets_measure/constants.dart';
+import 'package:lets_measure/views/color_selection_screen.dart';
 import 'package:lets_measure/widgets/error_dialog.dart';
 import 'package:lets_measure/views/image_output.dart';
 import 'package:lets_measure/widgets/build_button.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'color_detect.dart';
 
 class ImageInputScreen extends StatefulWidget {
-  const ImageInputScreen({Key? key}) : super(key: key);
+  final String title;
+  const ImageInputScreen({required this.title});
 
   @override
   State<ImageInputScreen> createState() => _ImageInputScreenState();
@@ -61,7 +64,7 @@ class _ImageInputScreenState extends State<ImageInputScreen> {
               ],
         androidUiSettings: AndroidUiSettings(
             toolbarTitle: 'Cropper',
-            toolbarColor: Colors.deepOrange,
+            toolbarColor: Colors.deepOrangeAccent,
             toolbarWidgetColor: Colors.white,
             initAspectRatio: CropAspectRatioPreset.original,
             lockAspectRatio: false),
@@ -78,19 +81,29 @@ class _ImageInputScreenState extends State<ImageInputScreen> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+        backgroundColor: kMeasureDimension,
+      ),
       floatingActionButton: FloatingActionButton.extended(
           backgroundColor: kBlueColor,
           heroTag: 'uniqueTag',
           label: Row(
             children: [
-              const Text('Next'),
+              const Text('Next  '),
               const Icon(Icons.verified_outlined),
             ],
           ),
           onPressed: () {
             imageSelected
                 ? Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return ImageOutput(image: image);
+                    if (widget.title == 'Detect Color') {
+                      return ColorSelectionScreen(image: image!);
+                    } else
+                      return ImageOutput(
+                        image: image,
+                        title: widget.title,
+                      );
                   }))
                 : () {};
           }),
@@ -98,25 +111,25 @@ class _ImageInputScreenState extends State<ImageInputScreen> {
         children: <Widget>[
           Container(
             height: size.height * .4,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: kBlueLightColor,
-              image: DecorationImage(
-                image: AssetImage("assets/images/tape_bg.png"),
-                fit: BoxFit.fitWidth,
-              ),
+              //image: DecorationImage(
+              //image: AssetImage("assets/images/tape_bg.png"),
+              // fit: BoxFit.fitWidth,
+              // ),
             ),
           ),
           SafeArea(
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: Text(
-                    "Measure Dimensions",
-                    style: Theme.of(context).textTheme.headline3,
-                    //.copyWith(fontWeight: FontWeight.w900),
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.only(left: 20, top: 10),
+                //   child: Text(
+                //     widget.title,
+                //     style: Theme.of(context).textTheme.headline3,
+                //     //.copyWith(fontWeight: FontWeight.w900),
+                //   ),
+                // ),
                 // const SizedBox(height: 24),
                 BuildButton(
                   title: 'Pick Image',

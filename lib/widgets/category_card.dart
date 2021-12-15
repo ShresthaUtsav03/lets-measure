@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lets_measure/views/color_selection_screen.dart';
 import 'package:lets_measure/views/graphic_input.dart';
 
 import '../constants.dart';
@@ -42,7 +43,7 @@ class CategoryCard extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) {
-                  return ImageInputScreen();
+                  return ImageInputScreen(title: title);
                 }),
               );
             },

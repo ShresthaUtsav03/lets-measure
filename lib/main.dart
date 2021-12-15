@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lets_measure/views/graphic_input.dart';
+import 'package:lets_measure/views/color_details_screen.dart';
 import 'package:lets_measure/views/home.dart';
 
 import 'constants.dart';
@@ -25,7 +25,7 @@ class LetsMeasure extends StatelessWidget {
         initialRoute: '/home',
         routes: {
           '/home': (context) => const HomeScreen(),
-          '/imageInput': (context) => const ImageInputScreen(),
+          ColorDetailsScreen.routeName: (context) => ColorDetailsScreen(),
         });
   }
 }

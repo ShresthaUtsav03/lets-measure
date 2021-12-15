@@ -12,12 +12,7 @@ Future<void> showErrorDialog(BuildContext context, String errorMsg) {
           TextButton(
             child: const Text('Ok'),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const HomeScreen(),
-                ),
-              );
+              Navigator.pop(context);
             },
           ),
         ],
