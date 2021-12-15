@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_pixels/image_pixels.dart';
+import 'package:lets_measure/helpers/color_converter.dart';
 import 'dart:io';
 import 'dart:async';
 
@@ -25,6 +26,7 @@ class _ColorSelectionScreenState extends State<ColorSelectionScreen> {
     child: Container(width: 0.0, height: 0.0),
   );
   late Color currentSelection;
+  late String colorHex;
   bool colorSelected = false;
 
   Future _getImage(camOrGal) async {
@@ -55,7 +57,7 @@ class _ColorSelectionScreenState extends State<ColorSelectionScreen> {
     bool flippedY = localOffset.dy < Dropper.totalHeight;
     if (box.size.height - localOffset.dy > 0 && localOffset.dy > 0) {
       currentSelection = img.pixelColorAt!(x, y);
-      print(currentSelection.toString());
+      colorHex = colourToHex(currentSelection.toString());
       colorSelected = true;
       setState(() {
         _createDropper(localOffset.dx, box.size.height - localOffset.dy,
@@ -180,12 +182,51 @@ class _ColorSelectionScreenState extends State<ColorSelectionScreen> {
                 if (colorSelected) {
                   print("Image value: $widget.image");
                   if (currentSelection != null && widget.image != null) {
-                    Navigator.pushNamed(
-                      context,
-                      ColorDetailsScreen.routeName,
-                      arguments: ExtractArguments(
-                          FileImage(widget.image), currentSelection),
-                    );
+                    showModalBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return Container(
+                            color: Color(0xFF737373),
+                            child: Container(
+                              height: 120,
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).canvasColor,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                ),
+                              ),
+                              child: Center(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Container(
+                                      width: 40,
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        color: currentSelection,
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(color: Colors.black),
+                                      ),
+                                    ),
+                                    Text(
+                                      "#${colorHex}",
+                                      style:
+                                          Theme.of(context).textTheme.headline4,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        });
+                    // Navigator.pushNamed(
+                    //   context,
+                    //   ColorDetailsScreen.routeName,
+                    //   arguments: ExtractArguments(
+                    //       FileImage(widget.image), currentSelection),
+                    // );
                   }
                 } else {}
               }),
