@@ -4,16 +4,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:image_pixels/image_pixels.dart';
 import 'package:lets_measure/helpers/color_converter.dart';
 import 'dart:io';
-import 'dart:async';
 
 import '../constants.dart';
-import './color_details_screen.dart';
-import '../extract_arguments.dart';
 import '../dropper.dart';
 
 class ColorSelectionScreen extends StatefulWidget {
   File image;
-  ColorSelectionScreen({required this.image});
+  ColorSelectionScreen({Key? key, required this.image}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _ColorSelectionScreenState();
@@ -29,24 +26,24 @@ class _ColorSelectionScreenState extends State<ColorSelectionScreen> {
   late String colorHex;
   bool colorSelected = false;
 
-  Future _getImage(camOrGal) async {
-    ImageSource source;
+  // Future _getImage(camOrGal) async {
+  //   ImageSource source;
 
-    camOrGal == 'camera'
-        ? source = ImageSource.camera
-        : source = ImageSource.gallery;
+  //   camOrGal == 'camera'
+  //       ? source = ImageSource.camera
+  //       : source = ImageSource.gallery;
 
-    final pickedFile = await picker.pickImage(source: source);
+  //   final pickedFile = await picker.pickImage(source: source);
 
-    setState(() {
-      if (pickedFile != null) {
-        widget.image = File(pickedFile.path);
-      } else {
-        print(
-            'No image selected - if you\'re seeing this something is really wrong');
-      }
-    });
-  }
+  //   setState(() {
+  //     if (pickedFile != null) {
+  //       widget.image = File(pickedFile.path);
+  //     } else {
+  //       print(
+  //           'No image selected - if you\'re seeing this something is really wrong');
+  //     }
+  //   });
+  // }
 
   void _screenTouched(dynamic details, ImgDetails img, RenderBox box) {
     double widgetScale = box.size.width / img.width!;
@@ -105,7 +102,8 @@ class _ColorSelectionScreenState extends State<ColorSelectionScreen> {
           ],
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      //floatingActionButtonLocation: FloatingActionButtonLocation.,
+
       floatingActionButton:
           //Row(
           // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -166,9 +164,9 @@ class _ColorSelectionScreenState extends State<ColorSelectionScreen> {
           FloatingActionButton.extended(
               backgroundColor: kBlueColor,
               label: Row(
-                children: [
-                  const Text('Done'),
-                  const Icon(Icons.verified_outlined),
+                children: const [
+                  Text('Done  '),
+                  Icon(Icons.verified_outlined),
                 ],
               ),
               heroTag: "colorDetailsButton",
@@ -180,18 +178,18 @@ class _ColorSelectionScreenState extends State<ColorSelectionScreen> {
               // ),
               onPressed: () {
                 if (colorSelected) {
-                  print("Image value: $widget.image");
+                  //("Image value: $widget.image");
                   if (currentSelection != null && widget.image != null) {
                     showModalBottomSheet(
                         context: context,
                         builder: (context) {
                           return Container(
-                            color: Color(0xFF737373),
+                            color: const Color(0xFF737373),
                             child: Container(
                               height: 120,
                               decoration: BoxDecoration(
                                 color: Theme.of(context).canvasColor,
-                                borderRadius: BorderRadius.only(
+                                borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(10),
                                   topRight: Radius.circular(10),
                                 ),
@@ -211,7 +209,7 @@ class _ColorSelectionScreenState extends State<ColorSelectionScreen> {
                                       ),
                                     ),
                                     Text(
-                                      "#${colorHex}",
+                                      "#$colorHex",
                                       style:
                                           Theme.of(context).textTheme.headline4,
                                     ),

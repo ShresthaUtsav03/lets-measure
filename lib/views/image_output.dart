@@ -11,7 +11,8 @@ import 'package:lets_measure/widgets/loading.dart';
 class ImageOutput extends StatefulWidget {
   File? image;
   final String title;
-  ImageOutput({required this.image, required this.title});
+  ImageOutput({Key? key, required this.image, required this.title})
+      : super(key: key);
 
   @override
   State<ImageOutput> createState() => _ImageOutputState();
@@ -22,6 +23,7 @@ class _ImageOutputState extends State<ImageOutput> {
   String message = "";
   String resultImage = "";
   String errorMsg = "";
+  String route = "";
   Widget imageOutput = const FlutterLogo();
 
   @override
@@ -31,10 +33,18 @@ class _ImageOutputState extends State<ImageOutput> {
   }
 
   uploadImage() async {
+    if (widget.title == "Measure Dimensions") {
+      route = "object_measurement_rectangle";
+    } else if (widget.title == "Circle Measurement") {
+      route = "object_measurement_circle";
+    } else {
+      route = "angledetector";
+    }
+
     try {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse(kApiUrl + "object_measurement_circle"),
+        Uri.parse(kApiUrl + route),
       );
       print("Connecting to " + kApiUrl);
       Map<String, String> headers = {"Content-type": "multipart/form-data"};
@@ -66,6 +76,7 @@ class _ImageOutputState extends State<ImageOutput> {
       showErrorDialog(context, errorMsg);
     }
 
+    // ignore: avoid_print
     print(resultImage);
 
     //displayResponseImage();
@@ -86,14 +97,9 @@ class _ImageOutputState extends State<ImageOutput> {
     try {
       Uint8List convertedBytes = base64Decode(resultImage);
       //print("The uint8list is:" + resultImage);
-      imageOutput = Container(
-        //width: 120,
-        //height: 120,
-
-        child: Image.memory(
-          convertedBytes,
-          fit: BoxFit.cover,
-        ),
+      imageOutput = Image.memory(
+        convertedBytes,
+        fit: BoxFit.cover,
       );
     } catch (e) {
       errorMsg = e.toString();
@@ -103,8 +109,6 @@ class _ImageOutputState extends State<ImageOutput> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-
     //uploadImage();
     return Scaffold(
       appBar: AppBar(
@@ -115,7 +119,7 @@ class _ImageOutputState extends State<ImageOutput> {
       ),
       body: SafeArea(
           child: loading
-              ? Loading()
+              ? const Loading()
               : InteractiveViewer(
                   panEnabled: true, child: Center(child: imageOutput))),
     );

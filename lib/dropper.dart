@@ -21,8 +21,9 @@ class Dropper extends StatelessWidget {
         ..rotateY((flippedX ? 180 : 0) / 180 * pi)
         ..rotateX((flippedY ? 180 : 0) / 180 * pi),
       child: Transform.translate(
-        offset: flippedY ? Offset(0.0, -2 * totalHeight) : Offset(0.0, 0.0),
-        child: Container(
+        offset:
+            flippedY ? Offset(0.0, -2 * totalHeight) : const Offset(0.0, 0.0),
+        child: SizedBox(
           width: totalWidth,
           height: totalHeight,
           child: Stack(
@@ -30,11 +31,9 @@ class Dropper extends StatelessWidget {
               Positioned(
                 bottom: 0,
                 left: 0,
-                child: Container(
-                  child: Image.asset(
-                    'assets/images/dropper_thick.jpeg',
-                    scale: 7.0,
-                  ),
+                child: Image.asset(
+                  'assets/images/dropper_thick.jpeg',
+                  scale: 7.0,
                 ),
               ),
               Positioned(

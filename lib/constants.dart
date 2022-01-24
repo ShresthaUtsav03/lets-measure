@@ -8,4 +8,4 @@ const kBlueColor = Color(0xFF817DC0);
 const kMeasureDimension = Color(0xEC8178FF);
 const kShadowColor = Color(0xFFE6E6E6);
 const String kApiUrl =
-    'https://25d1-2400-1a00-b040-a125-dcd8-9d2a-80b9-c83.ngrok.io/';
+    'http://1ad2-2400-1a00-b040-8578-a4c0-dd94-901d-58c6.ngrok.io/';

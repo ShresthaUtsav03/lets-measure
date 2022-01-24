@@ -1,14 +1,15 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lets_measure/constants.dart';
+import 'package:lets_measure/views/angle_selection_screen.dart';
 import 'package:lets_measure/views/color_selection_screen.dart';
 import 'package:lets_measure/widgets/error_dialog.dart';
 import 'package:lets_measure/views/image_output.dart';
 import 'package:lets_measure/widgets/build_button.dart';
 import 'package:image_cropper/image_cropper.dart';
-import 'color_detect.dart';
 
 class ImageInputScreen extends StatefulWidget {
   final String title;
@@ -62,13 +63,13 @@ class _ImageInputScreenState extends State<ImageInputScreen> {
                 CropAspectRatioPreset.ratio7x5,
                 CropAspectRatioPreset.ratio16x9
               ],
-        androidUiSettings: AndroidUiSettings(
+        androidUiSettings: const AndroidUiSettings(
             toolbarTitle: 'Cropper',
             toolbarColor: Colors.deepOrangeAccent,
             toolbarWidgetColor: Colors.white,
             initAspectRatio: CropAspectRatioPreset.original,
             lockAspectRatio: false),
-        iosUiSettings: IOSUiSettings(
+        iosUiSettings: const IOSUiSettings(
           title: 'Cropper',
         ));
     if (croppedFile != null) {
@@ -89,9 +90,9 @@ class _ImageInputScreenState extends State<ImageInputScreen> {
           backgroundColor: kBlueColor,
           heroTag: 'uniqueTag',
           label: Row(
-            children: [
-              const Text('Next  '),
-              const Icon(Icons.verified_outlined),
+            children: const [
+              Text('Next  '),
+              Icon(Icons.verified_outlined),
             ],
           ),
           onPressed: () {
@@ -99,11 +100,14 @@ class _ImageInputScreenState extends State<ImageInputScreen> {
                 ? Navigator.push(context, MaterialPageRoute(builder: (context) {
                     if (widget.title == 'Detect Color') {
                       return ColorSelectionScreen(image: image!);
-                    } else
+                    } else if (widget.title == 'Measure Angle') {
+                      return AnglePointsSelector(image: image!);
+                    } else {
                       return ImageOutput(
                         image: image,
                         title: widget.title,
                       );
+                    }
                   }))
                 : () {};
           }),
@@ -131,6 +135,7 @@ class _ImageInputScreenState extends State<ImageInputScreen> {
                 //   ),
                 // ),
                 // const SizedBox(height: 24),
+                const SizedBox(height: 14),
                 BuildButton(
                   title: 'Pick Image',
                   icon: Icons.image_outlined,
@@ -151,15 +156,17 @@ class _ImageInputScreenState extends State<ImageInputScreen> {
                             Image.file(
                               image!,
                               width: size.width * 1,
-                              height: size.height * 0.45,
+                              height: size.height * 0.5,
                               //fit: BoxFit.fitHeight,
                             ),
                             SizedBox(
                               height: size.height * 0.45,
-                              child: Center(
+                              child: const Center(
                                 child: Text('Tap to CROP',
-                                    style: const TextStyle(
-                                        color: Colors.white, fontSize: 20)),
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold)),
                               ),
                             ),
                           ],
@@ -167,7 +174,7 @@ class _ImageInputScreenState extends State<ImageInputScreen> {
                       )
                     : SizedBox(
                         height: size.height * 0.45,
-                        child: Center(
+                        child: const Center(
                           child: Text('Image selected will be shown here'),
                         ),
                       ),
