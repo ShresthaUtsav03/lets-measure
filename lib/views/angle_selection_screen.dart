@@ -26,6 +26,7 @@ class _AnglePointSelectorState extends State<AnglePointsSelector> {
   String title = 'Select point ';
   List<int> intArr = [-1, -1, -1, -1, -1, -1];
   static final CREATE_POST_URL = kApiUrl + 'angledetector';
+  String angleEstimated = "Error, Please try again!";
 
   Positioned dropper = Positioned(
     child: Container(width: 0.0, height: 0.0),
@@ -72,6 +73,36 @@ class _AnglePointSelectorState extends State<AnglePointsSelector> {
           coordY3: intArr[5].toString());
       try {
         Post p = await createPost(CREATE_POST_URL, body: newPost.toMap());
+        setState(() {
+          showModalBottomSheet(
+              context: context,
+              builder: (context) {
+                return Container(
+                  color: const Color(0xFF737373),
+                  child: Container(
+                    height: 120,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).canvasColor,
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10),
+                      ),
+                    ),
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            "Clockwise angle is: " + angleEstimated,
+                            style: Theme.of(context).textTheme.headline5,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              });
+        });
       } catch (e) {
         showErrorDialog(context, e.toString());
       }
@@ -94,6 +125,7 @@ class _AnglePointSelectorState extends State<AnglePointsSelector> {
       }
       final resJson = json.decode(response.body);
       print(resJson['angle_value']);
+      angleEstimated = resJson['angle_value'].toString();
       return Post.fromJson(resJson);
     });
   }
