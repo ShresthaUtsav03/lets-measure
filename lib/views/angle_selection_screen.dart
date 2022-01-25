@@ -70,10 +70,14 @@ class _AnglePointSelectorState extends State<AnglePointsSelector> {
           coordY2: intArr[3].toString(),
           coordX3: intArr[4].toString(),
           coordY3: intArr[5].toString());
-      Post p = await createPost(CREATE_POST_URL, body: newPost.toMap());
+      try {
+        Post p = await createPost(CREATE_POST_URL, body: newPost.toMap());
+      } catch (e) {
+        showErrorDialog(context, e.toString());
+      }
 
       setState(() {
-        showErrorDialog(context, 'errorMsg');
+        //showErrorDialog(context, 'errorMsg');
         nextPoint = 0;
         intArr = [-1, -1, -1, -1, -1, -1];
       });
@@ -81,6 +85,7 @@ class _AnglePointSelectorState extends State<AnglePointsSelector> {
   }
 
   Future createPost(String url, {required Map body}) async {
+    print(url);
     return http.post(Uri.parse(url), body: body).then((http.Response response) {
       final int statusCode = response.statusCode;
 
