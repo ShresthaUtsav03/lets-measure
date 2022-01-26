@@ -26,7 +26,7 @@ class Post {
   }
 
   Map toMap() {
-    var map = new Map();
+    var map = Map();
     map['x1-coord'] = coordX1;
     map['y1-coord'] = coordY1;
     map['x2-coord'] = coordX2;

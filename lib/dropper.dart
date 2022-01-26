@@ -12,6 +12,7 @@ class Dropper extends StatelessWidget {
   final bool flippedX;
   final bool flippedY;
 
+  // ignore: use_key_in_widget_constructors
   const Dropper(this.colour, this.flippedX, this.flippedY);
 
   @override

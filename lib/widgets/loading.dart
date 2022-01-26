@@ -17,6 +17,7 @@ class Loading extends StatelessWidget {
               color: kBlueLightColor,
               size: 100.0,
             ),
+            const SizedBox(height: 10),
             Text('Your image is being processed!',
                 style: Theme.of(context).textTheme.bodyText1),
           ],

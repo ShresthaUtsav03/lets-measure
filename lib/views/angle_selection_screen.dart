@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_pixels/image_pixels.dart';
 import 'package:lets_measure/model/coordinates.dart';
-import 'package:lets_measure/views/image_output.dart';
 import 'package:lets_measure/widgets/error_dialog.dart';
-import 'package:lets_measure/widgets/stepper_main.dart';
 
 import '../constants.dart';
 import '../dropper.dart';
@@ -28,8 +26,8 @@ class _AngleEstimationScreenState extends State<AngleEstimatonScreen> {
   static final CREATE_POST_URL = kApiUrl + 'angledetector';
   String angleEstimated = "Error, Please try again!";
 
-  Positioned dropper = Positioned(
-    child: Container(width: 0.0, height: 0.0),
+  Positioned dropper = const Positioned(
+    child: SizedBox(width: 0.0, height: 0.0),
   );
 
   void _screenTouched(dynamic details, ImgDetails img, RenderBox box) {

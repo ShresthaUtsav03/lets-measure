@@ -42,7 +42,7 @@ class _ImageInputScreenState extends State<ImageInputScreen> {
     }
   }
 
-  Future<Null> _cropImage() async {
+  Future<void> _cropImage() async {
     File? croppedFile = await ImageCropper.cropImage(
         sourcePath: image!.path,
         aspectRatioPresets: Platform.isAndroid
@@ -83,8 +83,9 @@ class _ImageInputScreenState extends State<ImageInputScreen> {
     var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
+        foregroundColor: kTextColor,
         title: Text(widget.title),
-        backgroundColor: kMeasureDimension,
+        backgroundColor: Colors.deepOrangeAccent,
       ),
       floatingActionButton: FloatingActionButton.extended(
           backgroundColor: kBlueColor,
@@ -116,28 +117,15 @@ class _ImageInputScreenState extends State<ImageInputScreen> {
           Container(
             height: size.height * .4,
             decoration: const BoxDecoration(
-              color: kBlueLightColor,
-              //image: DecorationImage(
-              //image: AssetImage("assets/images/tape_bg.png"),
-              // fit: BoxFit.fitWidth,
-              // ),
+              color: Color(0xFFFFCCBC),
             ),
           ),
           SafeArea(
             child: Column(
               children: [
-                // Padding(
-                //   padding: const EdgeInsets.only(left: 20, top: 10),
-                //   child: Text(
-                //     widget.title,
-                //     style: Theme.of(context).textTheme.headline3,
-                //     //.copyWith(fontWeight: FontWeight.w900),
-                //   ),
-                // ),
-                // const SizedBox(height: 24),
                 const SizedBox(height: 14),
                 BuildButton(
-                  title: 'Pick Image',
+                  title: 'Gallery',
                   icon: Icons.image_outlined,
                   onClicked: () => pickImage(ImageSource.gallery),
                 ),
@@ -157,7 +145,6 @@ class _ImageInputScreenState extends State<ImageInputScreen> {
                               image!,
                               width: size.width * 1,
                               height: size.height * 0.5,
-                              //fit: BoxFit.fitHeight,
                             ),
                             SizedBox(
                               height: size.height * 0.45,
@@ -173,9 +160,10 @@ class _ImageInputScreenState extends State<ImageInputScreen> {
                         ),
                       )
                     : SizedBox(
-                        height: size.height * 0.45,
+                        height: size.height * 0.5,
                         child: const Center(
-                          child: Text('Image selected will be shown here'),
+                          child: Text(
+                              'Hint: You may tap on the image after selection\n for Cropping, Rotating and Resizing..'),
                         ),
                       ),
               ],

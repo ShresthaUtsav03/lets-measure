@@ -48,7 +48,7 @@ class HomeScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.headline3
                       //.copyWith(fontWeight: FontWeight.w900),
                       ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 50),
                   Expanded(
                     child: GridView.count(
                       crossAxisCount: 2,
@@ -75,11 +75,6 @@ class HomeScreen extends StatelessWidget {
                           title: "Measure Angle",
                           svgSrc: "assets/icons/Angle.svg",
                           selectedOption: 'Angle',
-                        ),
-                        CategoryCard(
-                          title: "Compass \nand Level ",
-                          svgSrc: "assets/icons/Compass1.svg",
-                          selectedOption: 'Compass',
                         ),
                       ],
                     ),

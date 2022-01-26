@@ -9,7 +9,5 @@ String colourToRGB(String hex) {
       int.parse(hex.substring(2, 4), radix: 16).toString().padLeft(3, '0');
   rgb = rgb +
       int.parse(hex.substring(4, 6), radix: 16).toString().padLeft(3, '0');
-
-  print(rgb);
   return rgb;
 }

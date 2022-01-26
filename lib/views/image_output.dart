@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
@@ -35,10 +36,8 @@ class _ImageOutputState extends State<ImageOutput> {
   uploadImage() async {
     if (widget.title == "Measure Dimensions") {
       route = "object_measurement_rectangle";
-    } else if (widget.title == "Circle Measurement") {
-      route = "object_measurement_circle";
     } else {
-      route = "angledetector";
+      route = "object_measurement_circle";
     }
 
     try {
@@ -59,9 +58,13 @@ class _ImageOutputState extends State<ImageOutput> {
       );
       request.headers.addAll(headers);
       //print("request: " + request.toString());
-      final response = await request.send();
+      final response =
+          await request.send().timeout(const Duration(seconds: 15));
+      ;
 
-      http.Response res = await http.Response.fromStream(response);
+      http.Response res = await http.Response.fromStream(response)
+          .timeout(const Duration(seconds: 15));
+      ;
       final resJson = jsonDecode(res.body);
       loading = false;
 
@@ -71,9 +74,13 @@ class _ImageOutputState extends State<ImageOutput> {
         print(resJson['no_of_circles']);
       }
       displayResponseImage();
+    } on TimeoutException catch (e) {
+      showErrorDialog(context,
+          'Sorry we are unable to connect with the server\n Make sure you are connected with the server');
     } catch (e) {
       errorMsg = e.toString();
       showErrorDialog(context, errorMsg);
+      Navigator.pop(context);
     }
 
     // ignore: avoid_print
@@ -112,9 +119,8 @@ class _ImageOutputState extends State<ImageOutput> {
     //uploadImage();
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
         title: const Text('Output Image'),
-        backgroundColor: kBlueLightColor,
+        backgroundColor: Colors.deepOrangeAccent,
         foregroundColor: kTextColor,
       ),
       body: SafeArea(
