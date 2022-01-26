@@ -7,23 +7,23 @@ import 'package:image_pixels/image_pixels.dart';
 import 'package:lets_measure/model/coordinates.dart';
 import 'package:lets_measure/views/image_output.dart';
 import 'package:lets_measure/widgets/error_dialog.dart';
+import 'package:lets_measure/widgets/stepper_main.dart';
 
 import '../constants.dart';
 import '../dropper.dart';
 
-class AnglePointsSelector extends StatefulWidget {
+class AngleEstimatonScreen extends StatefulWidget {
   File image;
-  AnglePointsSelector({Key? key, required this.image}) : super(key: key);
+  AngleEstimatonScreen({Key? key, required this.image}) : super(key: key);
 
   @override
-  _AnglePointSelectorState createState() => _AnglePointSelectorState();
+  _AngleEstimationScreenState createState() => _AngleEstimationScreenState();
 }
 
-class _AnglePointSelectorState extends State<AnglePointsSelector> {
+class _AngleEstimationScreenState extends State<AngleEstimatonScreen> {
   bool pointSelected = false;
   final picker = ImagePicker();
   int nextPoint = 0;
-  String title = 'Select point ';
   List<int> intArr = [-1, -1, -1, -1, -1, -1];
   static final CREATE_POST_URL = kApiUrl + 'angledetector';
   String angleEstimated = "Error, Please try again!";
@@ -137,7 +137,7 @@ class _AnglePointSelectorState extends State<AnglePointsSelector> {
     print(intArr);
     return Scaffold(
       appBar: AppBar(
-        title: Text(title + (nextPoint + 1).toString()),
+        title: const Text('Angle Estimation'),
         backgroundColor: Colors.orange,
         shadowColor: Colors.white,
       ),
@@ -153,28 +153,36 @@ class _AnglePointSelectorState extends State<AnglePointsSelector> {
           onPressed: () async {
             _nextPointSelection();
           }),
-      body: Center(
-        child: Stack(
-          children: <Widget>[
-            ImagePixels(
-                imageProvider: FileImage(widget.image),
-                builder: (BuildContext context, ImgDetails img) {
-                  return GestureDetector(
-                    child: Image.file(widget.image),
-                    onPanUpdate: (DragUpdateDetails details) {
-                      _screenTouched(details, img,
-                          context.findRenderObject() as RenderBox);
-                    },
-                    onTapDown: (TapDownDetails details) {
-                      pointSelected = true;
-                      _screenTouched(details, img,
-                          context.findRenderObject() as RenderBox);
-                    },
-                  );
-                }),
-            dropper
-          ],
-        ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Select the point',
+          ),
+          Center(
+            child: Stack(
+              children: <Widget>[
+                ImagePixels(
+                    imageProvider: FileImage(widget.image),
+                    builder: (BuildContext context, ImgDetails img) {
+                      return GestureDetector(
+                        child: Image.file(widget.image),
+                        onPanUpdate: (DragUpdateDetails details) {
+                          _screenTouched(details, img,
+                              context.findRenderObject() as RenderBox);
+                        },
+                        onTapDown: (TapDownDetails details) {
+                          pointSelected = true;
+                          _screenTouched(details, img,
+                              context.findRenderObject() as RenderBox);
+                        },
+                      );
+                    }),
+                dropper
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

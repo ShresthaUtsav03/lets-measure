@@ -8,16 +8,16 @@ import 'dart:io';
 import '../constants.dart';
 import '../dropper.dart';
 
-class ColorSelectionScreen extends StatefulWidget {
+class ColorDetectionScreen extends StatefulWidget {
   File image;
-  ColorSelectionScreen({Key? key, required this.image}) : super(key: key);
+  ColorDetectionScreen({Key? key, required this.image}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
-    return _ColorSelectionScreenState();
+    return _ColorDetectionScreenState();
   }
 }
 
-class _ColorSelectionScreenState extends State<ColorSelectionScreen> {
+class _ColorDetectionScreenState extends State<ColorDetectionScreen> {
   final picker = ImagePicker();
   Positioned dropper = Positioned(
     child: Container(width: 0.0, height: 0.0),
@@ -55,6 +55,7 @@ class _ColorSelectionScreenState extends State<ColorSelectionScreen> {
     if (box.size.height - localOffset.dy > 0 && localOffset.dy > 0) {
       currentSelection = img.pixelColorAt!(x, y);
       colorHex = colourToHex(currentSelection.toString());
+      print(colorHex);
       colorSelected = true;
       setState(() {
         _createDropper(localOffset.dx, box.size.height - localOffset.dy,
@@ -186,7 +187,7 @@ class _ColorSelectionScreenState extends State<ColorSelectionScreen> {
                           return Container(
                             color: const Color(0xFF737373),
                             child: Container(
-                              height: 120,
+                              height: 140,
                               decoration: BoxDecoration(
                                 color: Theme.of(context).canvasColor,
                                 borderRadius: const BorderRadius.only(
@@ -195,24 +196,39 @@ class _ColorSelectionScreenState extends State<ColorSelectionScreen> {
                                 ),
                               ),
                               child: Center(
-                                child: Row(
+                                child: Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    Container(
-                                      width: 40,
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        color: currentSelection,
-                                        borderRadius: BorderRadius.circular(12),
-                                        border: Border.all(color: Colors.black),
-                                      ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Container(
+                                          width: 40,
+                                          height: 40,
+                                          decoration: BoxDecoration(
+                                            color: currentSelection,
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            border:
+                                                Border.all(color: Colors.black),
+                                          ),
+                                        ),
+                                        Text(
+                                          "#$colorHex",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline4,
+                                        ),
+                                      ],
                                     ),
-                                    Text(
-                                      "#$colorHex",
-                                      style:
-                                          Theme.of(context).textTheme.headline4,
-                                    ),
+                                    Text("R: " +
+                                        colourToRGB(colorHex).substring(0, 3) +
+                                        ",  G: " +
+                                        colourToRGB(colorHex).substring(3, 6) +
+                                        ",  B: " +
+                                        colourToRGB(colorHex).substring(6, 9)),
                                   ],
                                 ),
                               ),

@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lets_measure/constants.dart';
 import 'package:lets_measure/views/angle_selection_screen.dart';
-import 'package:lets_measure/views/color_selection_screen.dart';
+import 'package:lets_measure/views/color_detection_screen.dart';
 import 'package:lets_measure/widgets/error_dialog.dart';
 import 'package:lets_measure/views/image_output.dart';
 import 'package:lets_measure/widgets/build_button.dart';
@@ -99,9 +99,9 @@ class _ImageInputScreenState extends State<ImageInputScreen> {
             imageSelected
                 ? Navigator.push(context, MaterialPageRoute(builder: (context) {
                     if (widget.title == 'Detect Color') {
-                      return ColorSelectionScreen(image: image!);
+                      return ColorDetectionScreen(image: image!);
                     } else if (widget.title == 'Measure Angle') {
-                      return AnglePointsSelector(image: image!);
+                      return AngleEstimatonScreen(image: image!);
                     } else {
                       return ImageOutput(
                         image: image,
