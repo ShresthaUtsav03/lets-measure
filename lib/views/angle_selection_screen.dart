@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:image_pixels/image_pixels.dart';
 import 'package:lets_measure/model/coordinates.dart';
 import 'package:lets_measure/widgets/error_dialog.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../constants.dart';
 import '../widgets/dropper.dart';
@@ -22,9 +23,9 @@ class AngleEstimatonScreen extends StatefulWidget {
 class _AngleEstimationScreenState extends State<AngleEstimatonScreen> {
   bool pointSelected = false;
   final picker = ImagePicker();
-  int nextPoint = 0;
+  int index = 0;
   List<int> intArr = [-1, -1, -1, -1, -1, -1];
-  static final CREATE_POST_URL = kApiUrl + 'angledetector';
+  static final route = kApiUrl + 'angledetector';
   String angleEstimated = "Error, Please try again!";
 
   Positioned dropper = const Positioned(
@@ -40,8 +41,8 @@ class _AngleEstimationScreenState extends State<AngleEstimatonScreen> {
     bool flippedY = localOffset.dy < Dropper.totalHeight;
     if (box.size.height - localOffset.dy > 0 && localOffset.dy > 0) {
       setState(() {
-        intArr[nextPoint] = x;
-        intArr[nextPoint + 1] = y;
+        intArr[index] = x;
+        intArr[index + 1] = y;
         _createDropper(localOffset.dx, box.size.height - localOffset.dy,
             img.pixelColorAt!(x, y), flippedX, flippedY);
       });
@@ -60,10 +61,10 @@ class _AngleEstimationScreenState extends State<AngleEstimatonScreen> {
   Future<void> _nextPointSelection() async {
     if (intArr[5] == -1) {
       setState(() {
-        nextPoint = nextPoint + 2;
+        index = index + 2;
       });
     } else {
-      Post newPost = new Post(
+      Post newPost = Post(
           coordX1: intArr[0].toString(),
           coordY1: intArr[1].toString(),
           coordX2: intArr[2].toString(),
@@ -71,7 +72,7 @@ class _AngleEstimationScreenState extends State<AngleEstimatonScreen> {
           coordX3: intArr[4].toString(),
           coordY3: intArr[5].toString());
       try {
-        Post p = await createPost(CREATE_POST_URL, body: newPost.toMap());
+        await createPost(route, body: newPost.toMap());
         setState(() {
           showModalBottomSheet(
               context: context,
@@ -111,7 +112,7 @@ class _AngleEstimationScreenState extends State<AngleEstimatonScreen> {
 
       setState(() {
         //showErrorDialog(context, 'errorMsg');
-        nextPoint = 0;
+        index = 0;
         intArr = [-1, -1, -1, -1, -1, -1];
       });
     }
@@ -119,22 +120,22 @@ class _AngleEstimationScreenState extends State<AngleEstimatonScreen> {
 
   Future createPost(String url, {required Map body}) async {
     try {
-      print(url);
+      //print(url);
       return http
           .post(Uri.parse(url), body: body)
           .then((http.Response response) {
         final int statusCode = response.statusCode;
 
         if (statusCode < 200 || statusCode > 400 || json == null) {
-          throw new Exception("Error while fetching data");
+          throw Exception("Error while fetching data");
         }
         final resJson = json.decode(response.body);
-        print(resJson['angle_value']);
+        //print(resJson['angle_value']);
         angleEstimated = resJson['angle_value'].toString();
         return Post.fromJson(resJson);
       });
     } on TimeoutException catch (e) {
-      print(e.toString());
+      //print(e.toString());
       setState(() {
         Navigator.pop(context);
         showErrorDialog(context,
@@ -148,15 +149,30 @@ class _AngleEstimationScreenState extends State<AngleEstimatonScreen> {
     }
   }
 
+  Widget _helpText() {
+    switch (index) {
+      case 0:
+        return const Text('Drag the pointer to the mid point in angle');
+
+      case 2:
+        return const Text('Now to the first point clockwise');
+
+      case 4:
+        return const Text('This time to the next end clockwise');
+
+      default:
+        return const Text('');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     pointSelected = false;
-    print("Next point: " + nextPoint.toString());
-    print(intArr);
+    // print("Next point: " + index.toString());
+    // print(intArr);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Angle Estimation'),
-        foregroundColor: kTextColor,
         backgroundColor: Colors.deepOrangeAccent,
         shadowColor: Colors.white,
       ),
@@ -170,30 +186,38 @@ class _AngleEstimationScreenState extends State<AngleEstimatonScreen> {
             ],
           ),
           onPressed: () async {
+            Fluttertoast.showToast(msg: "Point selected");
             _nextPointSelection();
           }),
-      body: Center(
-        child: Stack(
-          children: <Widget>[
-            ImagePixels(
-                imageProvider: FileImage(widget.image),
-                builder: (BuildContext context, ImgDetails img) {
-                  return GestureDetector(
-                    child: Image.file(widget.image),
-                    onPanUpdate: (DragUpdateDetails details) {
-                      _screenTouched(details, img,
-                          context.findRenderObject() as RenderBox);
-                    },
-                    onTapDown: (TapDownDetails details) {
-                      pointSelected = true;
-                      _screenTouched(details, img,
-                          context.findRenderObject() as RenderBox);
-                    },
-                  );
-                }),
-            dropper
-          ],
-        ),
+      body: Column(
+        children: [
+          _helpText(),
+          Expanded(
+            child: Center(
+              child: Stack(
+                children: <Widget>[
+                  ImagePixels(
+                      imageProvider: FileImage(widget.image),
+                      builder: (BuildContext context, ImgDetails img) {
+                        return GestureDetector(
+                          child: Image.file(widget.image),
+                          onPanUpdate: (DragUpdateDetails details) {
+                            _screenTouched(details, img,
+                                context.findRenderObject() as RenderBox);
+                          },
+                          onTapDown: (TapDownDetails details) {
+                            pointSelected = true;
+                            _screenTouched(details, img,
+                                context.findRenderObject() as RenderBox);
+                          },
+                        );
+                      }),
+                  dropper
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
