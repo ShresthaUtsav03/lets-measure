@@ -83,7 +83,7 @@ class _ImageInputScreenState extends State<ImageInputScreen> {
     var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        foregroundColor: kTextColor,
+        shadowColor: Colors.white,
         title: Text(widget.title),
         backgroundColor: Colors.deepOrangeAccent,
       ),
@@ -163,7 +163,7 @@ class _ImageInputScreenState extends State<ImageInputScreen> {
                         height: size.height * 0.5,
                         child: const Center(
                           child: Text(
-                              'Hint: You may tap on the image after selection\n for Cropping, Rotating and Resizing..'),
+                              'Hint: You may tap on the image after selection\n \t\t\t\t\t\tfor Cropping, Rotating and Resizing..'),
                         ),
                       ),
               ],

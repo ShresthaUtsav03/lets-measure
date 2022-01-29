@@ -6,7 +6,7 @@ import 'package:lets_measure/helpers/color_converter.dart';
 import 'dart:io';
 
 import '../constants.dart';
-import '../dropper.dart';
+import '../widgets/dropper.dart';
 
 class ColorDetectionScreen extends StatefulWidget {
   File image;
@@ -78,7 +78,7 @@ class _ColorDetectionScreenState extends State<ColorDetectionScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Color Selection'),
-        backgroundColor: Colors.orange,
+        backgroundColor: Colors.deepOrangeAccent,
         shadowColor: Colors.white,
       ),
       body: Center(
@@ -105,145 +105,140 @@ class _ColorDetectionScreenState extends State<ColorDetectionScreen> {
       ),
       //floatingActionButtonLocation: FloatingActionButtonLocation.,
 
-      floatingActionButton:
-          //Row(
-          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          // children: <Widget>[
-          //   FloatingActionButton(
-          //     heroTag: "hiddenButton",
-          //     elevation: 0.0,
-          //     backgroundColor: Colors.transparent,
-          //     child: Container(),
-          //     onPressed: () => {},
+      //Row(
+      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      // children: <Widget>[
+      //   FloatingActionButton(
+      //     heroTag: "hiddenButton",
+      //     elevation: 0.0,
+      //     backgroundColor: Colors.transparent,
+      //     child: Container(),
+      //     onPressed: () => {},
+      //   ),
+      // Builder(
+      //   builder: (context) =>
+      // FloatingActionButton(
+      // heroTag: "addPhotoButton",
+      // child: Theme.of(context).platform == TargetPlatform.iOS
+      //     ? Icon(CupertinoIcons.camera)
+      //     : Icon(Icons.add_a_photo),
+      // onPressed: () {
+      //   showModalBottomSheet(
+      //       context: context,
+      //       builder: (context) {
+      //         return Container(
+      //           color: Color(0xFF737373),
+      //           child: Container(
+      //             height: 120,
+      //             decoration: BoxDecoration(
+      //               color: Theme.of(context).canvasColor,
+      //               borderRadius: BorderRadius.only(
+      //                 topLeft: Radius.circular(10),
+      //                 topRight: Radius.circular(10),
+      //               ),
+      //             ),
+      //             child: Column(
+      //               children: <Widget>[
+      //                 ListTile(
+      //                   leading: Icon(Icons.photo_library),
+      //                   title: Text('Gallery'),
+      //                   onTap: () {
+      //                     _getImage('gallery');
+      //                     Navigator.pop(context);
+      //                   },
+      //                 ),
+      //                 ListTile(
+      //                     leading: Icon(Icons.photo_camera),
+      //                     title: Text('Camera'),
+      //                     onTap: () {
+      //                       _getImage('camera');
+      //                       Navigator.pop(context);
+      //                     }),
+      //               ],
+      //             ),
+      //           ),
+      //         );
+      //       });
+      // }),
+      // ),
+      floatingActionButton: FloatingActionButton.extended(
+          backgroundColor: kBlueColor,
+          label: Row(
+            children: const [
+              Text('Done  '),
+              Icon(Icons.verified_outlined),
+            ],
+          ),
+          heroTag: "colorDetailsButton",
+          // child: Center(
+          //   child: Image.asset(
+          //     'assets/images/dropper_white_transparent_background.jpeg',
+          //     scale: 8.5,
           //   ),
-          // Builder(
-          //   builder: (context) =>
-          // FloatingActionButton(
-          // heroTag: "addPhotoButton",
-          // child: Theme.of(context).platform == TargetPlatform.iOS
-          //     ? Icon(CupertinoIcons.camera)
-          //     : Icon(Icons.add_a_photo),
-          // onPressed: () {
-          //   showModalBottomSheet(
-          //       context: context,
-          //       builder: (context) {
-          //         return Container(
-          //           color: Color(0xFF737373),
-          //           child: Container(
-          //             height: 120,
-          //             decoration: BoxDecoration(
-          //               color: Theme.of(context).canvasColor,
-          //               borderRadius: BorderRadius.only(
-          //                 topLeft: Radius.circular(10),
-          //                 topRight: Radius.circular(10),
-          //               ),
-          //             ),
-          //             child: Column(
-          //               children: <Widget>[
-          //                 ListTile(
-          //                   leading: Icon(Icons.photo_library),
-          //                   title: Text('Gallery'),
-          //                   onTap: () {
-          //                     _getImage('gallery');
-          //                     Navigator.pop(context);
-          //                   },
-          //                 ),
-          //                 ListTile(
-          //                     leading: Icon(Icons.photo_camera),
-          //                     title: Text('Camera'),
-          //                     onTap: () {
-          //                       _getImage('camera');
-          //                       Navigator.pop(context);
-          //                     }),
-          //               ],
-          //             ),
-          //           ),
-          //         );
-          //       });
-          // }),
           // ),
-          FloatingActionButton.extended(
-              backgroundColor: kBlueColor,
-              label: Row(
-                children: const [
-                  Text('Done  '),
-                  Icon(Icons.verified_outlined),
-                ],
-              ),
-              heroTag: "colorDetailsButton",
-              // child: Center(
-              //   child: Image.asset(
-              //     'assets/images/dropper_white_transparent_background.jpeg',
-              //     scale: 8.5,
-              //   ),
-              // ),
-              onPressed: () {
-                if (colorSelected) {
-                  //("Image value: $widget.image");
-                  if (currentSelection != null && widget.image != null) {
-                    showModalBottomSheet(
-                        context: context,
-                        builder: (context) {
-                          return Container(
-                            color: const Color(0xFF737373),
-                            child: Container(
-                              height: 140,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).canvasColor,
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  topRight: Radius.circular(10),
-                                ),
-                              ),
-                              child: Center(
-                                child: Column(
+          onPressed: () {
+            if (colorSelected) {
+              //("Image value: $widget.image");
+              if (currentSelection != null && widget.image != null) {
+                showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return Container(
+                        color: const Color(0xFF737373),
+                        child: Container(
+                          height: 140,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).canvasColor,
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                            ),
+                          ),
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Container(
-                                          width: 40,
-                                          height: 40,
-                                          decoration: BoxDecoration(
-                                            color: currentSelection,
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            border:
-                                                Border.all(color: Colors.black),
-                                          ),
-                                        ),
-                                        Text(
-                                          "#$colorHex",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline4,
-                                        ),
-                                      ],
+                                    Container(
+                                      width: 40,
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        color: currentSelection,
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(color: Colors.black),
+                                      ),
                                     ),
-                                    Text("R: " +
-                                        colourToRGB(colorHex).substring(0, 3) +
-                                        ",  G: " +
-                                        colourToRGB(colorHex).substring(3, 6) +
-                                        ",  B: " +
-                                        colourToRGB(colorHex).substring(6, 9)),
+                                    Text(
+                                      "#$colorHex",
+                                      style:
+                                          Theme.of(context).textTheme.headline4,
+                                    ),
                                   ],
                                 ),
-                              ),
+                                Text("R: " +
+                                    colourToRGB(colorHex).substring(0, 3) +
+                                    ",  G: " +
+                                    colourToRGB(colorHex).substring(3, 6) +
+                                    ",  B: " +
+                                    colourToRGB(colorHex).substring(6, 9)),
+                              ],
                             ),
-                          );
-                        });
-                    // Navigator.pushNamed(
-                    //   context,
-                    //   ColorDetailsScreen.routeName,
-                    //   arguments: ExtractArguments(
-                    //       FileImage(widget.image), currentSelection),
-                    // );
-                  }
-                } else {}
-              }),
+                          ),
+                        ),
+                      );
+                    });
+                // Navigator.pushNamed(
+                //   context,
+                //   ColorDetailsScreen.routeName,
+                //   arguments: ExtractArguments(
+                //       FileImage(widget.image), currentSelection),
+                // );
+              }
+            } else {}
+          }),
       //   ],
       // ),
     );

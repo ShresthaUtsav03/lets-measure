@@ -1,20 +1,15 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lets_measure/views/graphic_input.dart';
-
 import '../constants.dart';
 
 class CategoryCard extends StatelessWidget {
   final String svgSrc;
   final String title;
-  final String selectedOption;
   const CategoryCard({
     Key? key,
     required this.svgSrc,
     required this.title,
-    required this.selectedOption,
   }) : super(key: key);
 
   @override
@@ -22,7 +17,6 @@ class CategoryCard extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(13),
       child: Container(
-        // padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(13),

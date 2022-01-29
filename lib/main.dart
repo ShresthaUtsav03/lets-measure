@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lets_measure/views/home.dart';
-
 import 'constants.dart';
 
 void main() {

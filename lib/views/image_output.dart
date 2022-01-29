@@ -45,7 +45,7 @@ class _ImageOutputState extends State<ImageOutput> {
         'POST',
         Uri.parse(kApiUrl + route),
       );
-      print("Connecting to " + kApiUrl);
+      //print("Connecting to " + kApiUrl);
       Map<String, String> headers = {"Content-type": "multipart/form-data"};
       request.files.add(
         http.MultipartFile(
@@ -58,13 +58,13 @@ class _ImageOutputState extends State<ImageOutput> {
       );
       request.headers.addAll(headers);
       //print("request: " + request.toString());
+      print('1');
       final response =
-          await request.send().timeout(const Duration(seconds: 15));
-      ;
-
+          await request.send().timeout(const Duration(seconds: 70));
+      print('2');
       http.Response res = await http.Response.fromStream(response)
-          .timeout(const Duration(seconds: 15));
-      ;
+          .timeout(const Duration(seconds: 100));
+      print('3');
       final resJson = jsonDecode(res.body);
       loading = false;
 
@@ -75,16 +75,22 @@ class _ImageOutputState extends State<ImageOutput> {
       }
       displayResponseImage();
     } on TimeoutException catch (e) {
-      showErrorDialog(context,
-          'Sorry we are unable to connect with the server\n Make sure you are connected with the server');
+      //loading = false;
+      print(e.toString());
+      setState(() {
+        Navigator.pop(context);
+        showErrorDialog(context,
+            'Sorry we are unable to connect with the server\n\nMake sure you are connected with the server');
+      });
     } catch (e) {
+      loading = false;
       errorMsg = e.toString();
-      showErrorDialog(context, errorMsg);
-      Navigator.pop(context);
+      print(errorMsg);
+      setState(() {
+        Navigator.pop(context);
+        showErrorDialog(context, errorMsg);
+      });
     }
-
-    // ignore: avoid_print
-    print(resultImage);
 
     //displayResponseImage();
     setState(() {});
@@ -103,7 +109,7 @@ class _ImageOutputState extends State<ImageOutput> {
   void displayResponseImage() async {
     try {
       Uint8List convertedBytes = base64Decode(resultImage);
-      //print("The uint8list is:" + resultImage);
+      print("The uint8list is:" + resultImage);
       imageOutput = Image.memory(
         convertedBytes,
         fit: BoxFit.cover,
@@ -111,17 +117,17 @@ class _ImageOutputState extends State<ImageOutput> {
     } catch (e) {
       errorMsg = e.toString();
       showErrorDialog(context, errorMsg);
+      Navigator.pop(context);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    //uploadImage();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Output Image'),
+        title: Text(widget.title),
         backgroundColor: Colors.deepOrangeAccent,
-        foregroundColor: kTextColor,
+        shadowColor: Colors.white,
       ),
       body: SafeArea(
           child: loading

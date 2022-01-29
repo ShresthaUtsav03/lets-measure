@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:async';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -8,7 +9,7 @@ import 'package:lets_measure/model/coordinates.dart';
 import 'package:lets_measure/widgets/error_dialog.dart';
 
 import '../constants.dart';
-import '../dropper.dart';
+import '../widgets/dropper.dart';
 
 class AngleEstimatonScreen extends StatefulWidget {
   File image;
@@ -102,7 +103,10 @@ class _AngleEstimationScreenState extends State<AngleEstimatonScreen> {
               });
         });
       } catch (e) {
-        showErrorDialog(context, e.toString());
+        setState(() {
+          Navigator.pop(context);
+          showErrorDialog(context, e.toString());
+        });
       }
 
       setState(() {
@@ -114,18 +118,34 @@ class _AngleEstimationScreenState extends State<AngleEstimatonScreen> {
   }
 
   Future createPost(String url, {required Map body}) async {
-    print(url);
-    return http.post(Uri.parse(url), body: body).then((http.Response response) {
-      final int statusCode = response.statusCode;
+    try {
+      print(url);
+      return http
+          .post(Uri.parse(url), body: body)
+          .then((http.Response response) {
+        final int statusCode = response.statusCode;
 
-      if (statusCode < 200 || statusCode > 400 || json == null) {
-        throw new Exception("Error while fetching data");
-      }
-      final resJson = json.decode(response.body);
-      print(resJson['angle_value']);
-      angleEstimated = resJson['angle_value'].toString();
-      return Post.fromJson(resJson);
-    });
+        if (statusCode < 200 || statusCode > 400 || json == null) {
+          throw new Exception("Error while fetching data");
+        }
+        final resJson = json.decode(response.body);
+        print(resJson['angle_value']);
+        angleEstimated = resJson['angle_value'].toString();
+        return Post.fromJson(resJson);
+      });
+    } on TimeoutException catch (e) {
+      print(e.toString());
+      setState(() {
+        Navigator.pop(context);
+        showErrorDialog(context,
+            'Sorry we are unable to connect with the server\n\nMake sure you are connected with the server');
+      });
+    } catch (e) {
+      setState(() {
+        Navigator.pop(context);
+        showErrorDialog(context, e.toString());
+      });
+    }
   }
 
   @override
@@ -136,7 +156,8 @@ class _AngleEstimationScreenState extends State<AngleEstimatonScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Angle Estimation'),
-        backgroundColor: Colors.orange,
+        foregroundColor: kTextColor,
+        backgroundColor: Colors.deepOrangeAccent,
         shadowColor: Colors.white,
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -151,36 +172,28 @@ class _AngleEstimationScreenState extends State<AngleEstimatonScreen> {
           onPressed: () async {
             _nextPointSelection();
           }),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Select the point',
-          ),
-          Center(
-            child: Stack(
-              children: <Widget>[
-                ImagePixels(
-                    imageProvider: FileImage(widget.image),
-                    builder: (BuildContext context, ImgDetails img) {
-                      return GestureDetector(
-                        child: Image.file(widget.image),
-                        onPanUpdate: (DragUpdateDetails details) {
-                          _screenTouched(details, img,
-                              context.findRenderObject() as RenderBox);
-                        },
-                        onTapDown: (TapDownDetails details) {
-                          pointSelected = true;
-                          _screenTouched(details, img,
-                              context.findRenderObject() as RenderBox);
-                        },
-                      );
-                    }),
-                dropper
-              ],
-            ),
-          ),
-        ],
+      body: Center(
+        child: Stack(
+          children: <Widget>[
+            ImagePixels(
+                imageProvider: FileImage(widget.image),
+                builder: (BuildContext context, ImgDetails img) {
+                  return GestureDetector(
+                    child: Image.file(widget.image),
+                    onPanUpdate: (DragUpdateDetails details) {
+                      _screenTouched(details, img,
+                          context.findRenderObject() as RenderBox);
+                    },
+                    onTapDown: (TapDownDetails details) {
+                      pointSelected = true;
+                      _screenTouched(details, img,
+                          context.findRenderObject() as RenderBox);
+                    },
+                  );
+                }),
+            dropper
+          ],
+        ),
       ),
     );
   }

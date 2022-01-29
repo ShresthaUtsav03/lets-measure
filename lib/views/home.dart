@@ -7,15 +7,12 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context)
-        .size; //this gonna give us total height and with of our device
+    var size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: const Color(0xFFF5CEB8),
-      //bottomNavigationBar: BottomNavBar(),
       body: Stack(
         children: <Widget>[
           Container(
-            // Here the height of the container is 45% of our total height
             height: size.height * .40,
             decoration: const BoxDecoration(
               color: Color(0xFFF5CEB8),
@@ -44,13 +41,12 @@ class HomeScreen extends StatelessWidget {
                       child: SvgPicture.asset("assets/icons/menu.svg"),
                     ),
                   ),
-                  Text("Let's \nMeasure!",
-                      style: Theme.of(context).textTheme.headline3
-                      //.copyWith(fontWeight: FontWeight.w900),
-                      ),
+                  Text("Let's \n  Measure!",
+                      style: Theme.of(context).textTheme.headline3),
                   const SizedBox(height: 50),
                   Expanded(
                     child: GridView.count(
+                      physics: const NeverScrollableScrollPhysics(),
                       crossAxisCount: 2,
                       childAspectRatio: .85,
                       crossAxisSpacing: 20,
@@ -59,22 +55,18 @@ class HomeScreen extends StatelessWidget {
                         CategoryCard(
                           title: "Measure Dimensions",
                           svgSrc: "assets/icons/Scales.svg",
-                          selectedOption: 'Dimension',
                         ),
                         CategoryCard(
                           title: "Circle Measurement",
                           svgSrc: "assets/icons/circle.svg",
-                          selectedOption: 'Dimension',
                         ),
                         CategoryCard(
                           title: "Detect Color",
                           svgSrc: "assets/icons/Color.svg",
-                          selectedOption: 'Color',
                         ),
                         CategoryCard(
                           title: "Measure Angle",
                           svgSrc: "assets/icons/Angle.svg",
-                          selectedOption: 'Angle',
                         ),
                       ],
                     ),
