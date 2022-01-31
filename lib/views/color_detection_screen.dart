@@ -55,7 +55,7 @@ class _ColorDetectionScreenState extends State<ColorDetectionScreen> {
     if (box.size.height - localOffset.dy > 0 && localOffset.dy > 0) {
       currentSelection = img.pixelColorAt!(x, y);
       colorHex = colourToHex(currentSelection.toString());
-      print(colorHex);
+      //print(colorHex);
       colorSelected = true;
       setState(() {
         _createDropper(localOffset.dx, box.size.height - localOffset.dy,

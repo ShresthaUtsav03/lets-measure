@@ -72,7 +72,8 @@ class _AngleEstimationScreenState extends State<AngleEstimatonScreen> {
           coordX3: intArr[4].toString(),
           coordY3: intArr[5].toString());
       try {
-        await createPost(route, body: newPost.toMap());
+        await createPost(route, body: newPost.toMap())
+            .timeout(const Duration(seconds: 100));
         setState(() {
           showModalBottomSheet(
               context: context,
@@ -93,7 +94,7 @@ class _AngleEstimationScreenState extends State<AngleEstimatonScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Text(
-                            "Clockwise angle is: " + angleEstimated,
+                            "Estimated angle is: " + angleEstimated,
                             style: Theme.of(context).textTheme.headline5,
                           ),
                         ],
@@ -102,6 +103,13 @@ class _AngleEstimationScreenState extends State<AngleEstimatonScreen> {
                   ),
                 );
               });
+        });
+      } on TimeoutException catch (e) {
+        //print(e.toString());
+        setState(() {
+          Navigator.pop(context);
+          showErrorDialog(context,
+              'Sorry we are unable to connect with the server\n\nMake sure you are connected with the server');
         });
       } catch (e) {
         setState(() {
@@ -134,17 +142,10 @@ class _AngleEstimationScreenState extends State<AngleEstimatonScreen> {
         angleEstimated = resJson['angle_value'].toString();
         return Post.fromJson(resJson);
       });
-    } on TimeoutException catch (e) {
-      //print(e.toString());
-      setState(() {
-        Navigator.pop(context);
-        showErrorDialog(context,
-            'Sorry we are unable to connect with the server\n\nMake sure you are connected with the server');
-      });
     } catch (e) {
       setState(() {
         Navigator.pop(context);
-        showErrorDialog(context, e.toString());
+        showErrorDialog(context, angleEstimated);
       });
     }
   }

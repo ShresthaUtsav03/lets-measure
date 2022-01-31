@@ -57,8 +57,8 @@ class HomeScreen extends StatelessWidget {
                           svgSrc: "assets/icons/Scales.svg",
                         ),
                         CategoryCard(
-                          title: "Circle Measurement",
-                          svgSrc: "assets/icons/circle.svg",
+                          title: "Area and Perimeter",
+                          svgSrc: "assets/icons/AreaPeri.svg",
                         ),
                         CategoryCard(
                           title: "Detect Color",

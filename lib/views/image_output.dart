@@ -58,13 +58,10 @@ class _ImageOutputState extends State<ImageOutput> {
       );
       request.headers.addAll(headers);
       //print("request: " + request.toString());
-      print('1');
       final response =
           await request.send().timeout(const Duration(seconds: 70));
-      print('2');
       http.Response res = await http.Response.fromStream(response)
           .timeout(const Duration(seconds: 100));
-      print('3');
       final resJson = jsonDecode(res.body);
       loading = false;
 
@@ -76,7 +73,7 @@ class _ImageOutputState extends State<ImageOutput> {
       displayResponseImage();
     } on TimeoutException catch (e) {
       //loading = false;
-      print(e.toString());
+      //print(e.toString());
       setState(() {
         Navigator.pop(context);
         showErrorDialog(context,
@@ -85,7 +82,7 @@ class _ImageOutputState extends State<ImageOutput> {
     } catch (e) {
       loading = false;
       errorMsg = e.toString();
-      print(errorMsg);
+      //print(errorMsg);
       setState(() {
         Navigator.pop(context);
         showErrorDialog(context, errorMsg);
@@ -109,7 +106,7 @@ class _ImageOutputState extends State<ImageOutput> {
   void displayResponseImage() async {
     try {
       Uint8List convertedBytes = base64Decode(resultImage);
-      print("The uint8list is:" + resultImage);
+      //print("The uint8list is:" + resultImage);
       imageOutput = Image.memory(
         convertedBytes,
         fit: BoxFit.cover,
