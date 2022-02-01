@@ -69,7 +69,7 @@ class _ColorDetectionScreenState extends State<ColorDetectionScreen> {
     dropper = Positioned(
       left: left,
       bottom: bottom,
-      child: Dropper(colour, flippedX, flippedY),
+      child: Dropper(colour, flippedX, flippedY, 'color'),
     );
   }
 

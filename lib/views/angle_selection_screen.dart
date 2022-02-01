@@ -54,7 +54,7 @@ class _AngleEstimationScreenState extends State<AngleEstimatonScreen> {
     dropper = Positioned(
       left: left,
       bottom: bottom,
-      child: Dropper(colour, flippedX, flippedY),
+      child: Dropper(colour, flippedX, flippedY, 'angle'),
     );
   }
 
