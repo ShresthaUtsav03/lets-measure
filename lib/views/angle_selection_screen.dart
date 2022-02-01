@@ -106,23 +106,16 @@ class _AngleEstimationScreenState extends State<AngleEstimatonScreen> {
         });
       } on TimeoutException catch (e) {
         //print(e.toString());
-        setState(() {
-          Navigator.pop(context);
-          showErrorDialog(context,
-              'Sorry we are unable to connect with the server\n\nMake sure you are connected with the server');
-        });
+
+        showErrorDialog(context,
+            'Sorry we are unable to connect with the server\n\nMake sure you are connected with the server');
       } catch (e) {
-        setState(() {
-          Navigator.pop(context);
-          showErrorDialog(context, e.toString());
-        });
+        showErrorDialog(context, e.toString());
       }
 
-      setState(() {
-        //showErrorDialog(context, 'errorMsg');
-        index = 0;
-        intArr = [-1, -1, -1, -1, -1, -1];
-      });
+      //showErrorDialog(context, 'errorMsg');
+      index = 0;
+      intArr = [-1, -1, -1, -1, -1, -1];
     }
   }
 
@@ -143,10 +136,7 @@ class _AngleEstimationScreenState extends State<AngleEstimatonScreen> {
         return Post.fromJson(resJson);
       });
     } catch (e) {
-      setState(() {
-        Navigator.pop(context);
-        showErrorDialog(context, angleEstimated);
-      });
+      showErrorDialog(context, angleEstimated);
     }
   }
 

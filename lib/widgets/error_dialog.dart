@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 Future<void> showErrorDialog(BuildContext context, String errorMsg) {
+  Navigator.pop(context);
   return showDialog<void>(
     context: context,
     builder: (BuildContext context) {

@@ -81,23 +81,25 @@ class _ImageOutputState extends State<ImageOutput> {
       if (widget.title == 'Circle Measure') {
         print(resJson['no_of_circles']);
       }
-      displayResponseImage();
+      switch (message) {
+        case "success":
+          displayResponseImage();
+          break;
+        default:
+          showErrorDialog(context, 'Emotional Damage!');
+      }
     } on TimeoutException catch (e) {
       //loading = false;
       //print(e.toString());
-      setState(() {
-        Navigator.pop(context);
-        showErrorDialog(context,
-            'Sorry we are unable to connect with the server\n\nMake sure you are connected with the server');
-      });
+
+      showErrorDialog(context,
+          'Sorry we are unable to connect with the server\n\nMake sure you are connected with the server');
     } catch (e) {
       loading = false;
-      errorMsg = e.toString();
       //print(errorMsg);
-      setState(() {
-        Navigator.pop(context);
-        showErrorDialog(context, errorMsg);
-      });
+
+      showErrorDialog(context,
+          'Ooops..there seems to be a problem connecting with the server!\n\nPlease try again!');
     }
 
     //displayResponseImage();
@@ -125,7 +127,6 @@ class _ImageOutputState extends State<ImageOutput> {
     } catch (e) {
       errorMsg = e.toString();
       showErrorDialog(context, errorMsg);
-      Navigator.pop(context);
     }
   }
 
