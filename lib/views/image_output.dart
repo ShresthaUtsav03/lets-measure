@@ -72,10 +72,10 @@ class _ImageOutputState extends State<ImageOutput> {
       //print("request: " + request.toString());
       final response =
           await request.send().timeout(const Duration(seconds: 70));
+      loading = false;
       http.Response res = await http.Response.fromStream(response)
           .timeout(const Duration(seconds: 100));
       final resJson = jsonDecode(res.body);
-      loading = false;
 
       message = resJson['message'];
       resultImage = resJson['image'];
@@ -101,9 +101,6 @@ class _ImageOutputState extends State<ImageOutput> {
         default:
           showErrorDialog(context, message);
       }
-    } on TimeoutException catch (e) {
-      showErrorDialog(context,
-          'Sorry we are unable to connect with the server\n\nMake sure you are connected with the server');
     } catch (e) {
       loading = false;
 
@@ -111,7 +108,7 @@ class _ImageOutputState extends State<ImageOutput> {
           'Ooops..there seems to be a problem connecting with the server!\n\nPlease try again!');
     }
 
-    setState(() {});
+    //setState(() {});
     //final decodedBytes = base64Decode(resultImage);
     // base64 = resultImage.toString();
     // try {
@@ -128,10 +125,12 @@ class _ImageOutputState extends State<ImageOutput> {
     try {
       Uint8List convertedBytes = base64Decode(resultImage);
       //print("The uint8list is:" + resultImage);
-      imageOutput = Image.memory(
-        convertedBytes,
-        fit: BoxFit.cover,
-      );
+      setState(() {
+        imageOutput = Image.memory(
+          convertedBytes,
+          fit: BoxFit.cover,
+        );
+      });
     } catch (e) {
       showErrorDialog(context, e.toString());
     }

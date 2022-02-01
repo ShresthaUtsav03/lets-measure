@@ -18,7 +18,7 @@ class Dropper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String imgAddress = 'assets/images/dropper_thick.jpeg';
+    String imgAddress = 'assets/images/dropper_gradient.png';
     double scale = 7.0;
     if (calledBy == 'angle') {
       imgAddress = 'assets/images/pointer.png';
