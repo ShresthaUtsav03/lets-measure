@@ -34,10 +34,21 @@ class _ImageOutputState extends State<ImageOutput> {
   }
 
   uploadImage() async {
-    if (widget.title == "Measure Dimensions") {
-      route = "object_measurement_rectangle";
-    } else {
-      route = "object_measurement_circle";
+    switch (widget.title) {
+      case 'Circle: Dimensions':
+        route = "object_measurement_circle";
+        break;
+      case 'Polygon: Area and Perimeter':
+        route = "area_estimation_polygon";
+        break;
+      case 'Circle: Area and Perimeter':
+        route = "area_estimation_circle";
+        break;
+      case 'Polygon: Dimensions':
+        route = "object_measurement_rectangle";
+        break;
+      default:
+        route = "area_estimation_irregular";
     }
 
     try {

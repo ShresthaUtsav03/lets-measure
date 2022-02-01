@@ -35,14 +35,14 @@ class _CategoryCardState extends State<CategoryCard> {
                   ListTile(
                     title: const Text('Polygon'),
                     onTap: () {
-                      navigation = 'Polygon Dimension';
+                      navigation = 'Polygon: Dimensions';
                       Navigator.pop(context);
                     },
                   ),
                   ListTile(
                     title: const Text('Circle'),
                     onTap: () {
-                      navigation = 'Circle Dimension';
+                      navigation = 'Circle: Dimensions';
                       Navigator.pop(context);
                     },
                   ),
@@ -55,21 +55,21 @@ class _CategoryCardState extends State<CategoryCard> {
                   ListTile(
                     title: const Text('Polygon'),
                     onTap: () {
-                      navigation = 'Polygon Area and Perimeter';
+                      navigation = 'Polygon: Area and Perimeter';
                       Navigator.pop(context);
                     },
                   ),
                   ListTile(
                     title: const Text('Circle'),
                     onTap: () {
-                      navigation = 'Circle Area and Perimeter';
+                      navigation = 'Circle: Area and Perimeter';
                       Navigator.pop(context);
                     },
                   ),
                   ListTile(
                     title: const Text('Irregular'),
                     onTap: () {
-                      navigation = 'Irregular object Area and Perimeter';
+                      navigation = 'Irregular: Area and Perimeter';
                       Navigator.pop(context);
                     },
                   ),
