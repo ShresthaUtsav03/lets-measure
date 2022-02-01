@@ -25,6 +25,7 @@ class _ImageOutputState extends State<ImageOutput> {
   String resultImage = "";
   String errorMsg = "";
   String route = "";
+  int noOfObjects = 1;
   Widget imageOutput = const FlutterLogo();
 
   @override
@@ -78,31 +79,38 @@ class _ImageOutputState extends State<ImageOutput> {
 
       message = resJson['message'];
       resultImage = resJson['image'];
-      if (widget.title == 'Circle Measure') {
-        print(resJson['no_of_circles']);
-      }
+      noOfObjects = resJson['no of object'];
+      print(noOfObjects);
+
       switch (message) {
         case "success":
+          switch (noOfObjects) {
+            case -1:
+              showErrorDialog(context, "Aruco marker could not be detected!");
+              print("Aruco marker could not be detected!");
+              break;
+            case 0:
+              showErrorDialog(context, "No object could be detected!");
+              print("No object could be detected!");
+              break;
+            default:
+              print("Objects detected!");
+          }
           displayResponseImage();
           break;
         default:
-          showErrorDialog(context, 'Emotional Damage!');
+          showErrorDialog(context, message);
       }
     } on TimeoutException catch (e) {
-      //loading = false;
-      //print(e.toString());
-
       showErrorDialog(context,
           'Sorry we are unable to connect with the server\n\nMake sure you are connected with the server');
     } catch (e) {
       loading = false;
-      //print(errorMsg);
 
       showErrorDialog(context,
           'Ooops..there seems to be a problem connecting with the server!\n\nPlease try again!');
     }
 
-    //displayResponseImage();
     setState(() {});
     //final decodedBytes = base64Decode(resultImage);
     // base64 = resultImage.toString();
@@ -125,8 +133,7 @@ class _ImageOutputState extends State<ImageOutput> {
         fit: BoxFit.cover,
       );
     } catch (e) {
-      errorMsg = e.toString();
-      showErrorDialog(context, errorMsg);
+      showErrorDialog(context, e.toString());
     }
   }
 
