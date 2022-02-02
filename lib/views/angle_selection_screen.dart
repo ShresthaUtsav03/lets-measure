@@ -104,7 +104,7 @@ class _AngleEstimationScreenState extends State<AngleEstimatonScreen> {
                 );
               });
         });
-      } on TimeoutException catch (e) {
+      } on TimeoutException {
         //print(e.toString());
 
         showErrorDialog(context,
@@ -127,7 +127,7 @@ class _AngleEstimationScreenState extends State<AngleEstimatonScreen> {
           .then((http.Response response) {
         final int statusCode = response.statusCode;
 
-        if (statusCode < 200 || statusCode > 400 || json == null) {
+        if (statusCode < 200 || statusCode > 400) {
           throw Exception("Error while fetching data");
         }
         final resJson = json.decode(response.body);

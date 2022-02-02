@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lets_measure/constants.dart';
 import 'package:lets_measure/widgets/category_card.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -43,7 +44,13 @@ class HomeScreen extends StatelessWidget {
                   ),
                   Text("Let's \n  Measure!",
                       style: Theme.of(context).textTheme.headline3),
-                  const SizedBox(height: 50),
+                  //const SizedBox(height: 50),
+                  TextField(
+                    autofocus: true,
+                    onChanged: (value) => kApiUrl = value + '/',
+                    decoration: const InputDecoration(
+                        border: InputBorder.none, hintText: 'Enter Server url'),
+                  ),
                   Expanded(
                     child: GridView.count(
                       physics: const NeverScrollableScrollPhysics(),
