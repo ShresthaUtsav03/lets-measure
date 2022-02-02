@@ -19,7 +19,6 @@ class CategoryCard extends StatefulWidget {
 class _CategoryCardState extends State<CategoryCard> {
   late String navigation;
   Future showBottomSheet(int count) => showModalBottomSheet(
-        isDismissible: false,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
           topLeft: Radius.circular(10),
@@ -79,6 +78,7 @@ class _CategoryCardState extends State<CategoryCard> {
         },
       );
   Future<String> _getNavigation() async {
+    navigation = '';
     switch (widget.title) {
       case 'Measure Dimensions':
         await showBottomSheet(2);
@@ -113,7 +113,7 @@ class _CategoryCardState extends State<CategoryCard> {
           child: InkWell(
             onTap: () async {
               navigation = await _getNavigation();
-              navigation != null
+              navigation != ''
                   ? Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) {

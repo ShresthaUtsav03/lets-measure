@@ -46,7 +46,6 @@ class HomeScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.headline3),
                   //const SizedBox(height: 50),
                   TextField(
-                    autofocus: true,
                     onChanged: (value) => kApiUrl = value + '/',
                     decoration: const InputDecoration(
                         border: InputBorder.none, hintText: 'Enter Server url'),
