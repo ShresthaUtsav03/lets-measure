@@ -12,22 +12,22 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../constants.dart';
 import '../widgets/dropper.dart';
 
-class AngleEstimatonScreen extends StatefulWidget {
+class AngleEstimationScreen extends StatefulWidget {
   File image;
-  AngleEstimatonScreen({Key? key, required this.image}) : super(key: key);
+  AngleEstimationScreen({Key? key, required this.image}) : super(key: key);
 
   @override
   _AngleEstimationScreenState createState() => _AngleEstimationScreenState();
 }
 
-class _AngleEstimationScreenState extends State<AngleEstimatonScreen> {
+class _AngleEstimationScreenState extends State<AngleEstimationScreen> {
   bool pointSelected = false;
-
+  late String message;
   final picker = ImagePicker();
   int index = 0;
   List<int> intArr = [-1, -1, -1, -1, -1, -1];
   static final route = kApiUrl + 'angledetector';
-  String angleEstimated = "Error, Please try again!";
+  String angleEstimated = "";
 
   Positioned dropper = const Positioned(
     child: SizedBox(width: 0.0, height: 0.0),
@@ -75,35 +75,40 @@ class _AngleEstimationScreenState extends State<AngleEstimatonScreen> {
       try {
         await createPost(route, body: newPost.toMap())
             .timeout(const Duration(seconds: 100));
-
-        showModalBottomSheet(
-            context: context,
-            builder: (context) {
-              return Container(
-                color: const Color(0xFF737373),
-                child: Container(
-                  height: 120,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).canvasColor,
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10),
-                    ),
-                  ),
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text(
-                          "Estimated angle is: " + angleEstimated,
-                          style: Theme.of(context).textTheme.headline5,
+        switch (message) {
+          case 'success':
+            showModalBottomSheet(
+                context: context,
+                builder: (context) {
+                  return Container(
+                    color: const Color(0xFF737373),
+                    child: Container(
+                      height: 120,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).canvasColor,
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(10),
                         ),
-                      ],
+                      ),
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(
+                              "Estimated angle is: " + angleEstimated,
+                              style: Theme.of(context).textTheme.headline5,
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              );
-            });
+                  );
+                });
+            break;
+          default:
+            showErrorDialog(context, message);
+        }
       } on TimeoutException {
         //print(e.toString());
 
@@ -133,6 +138,8 @@ class _AngleEstimationScreenState extends State<AngleEstimatonScreen> {
         final resJson = json.decode(response.body);
         //print(resJson['angle_value']);
         angleEstimated = resJson['angle_value'].toString();
+        message = resJson['message'];
+        print(message);
         return Post.fromJson(resJson);
       });
     } catch (e) {

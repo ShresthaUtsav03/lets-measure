@@ -102,7 +102,7 @@ class _ImageInputScreenState extends State<ImageInputScreen> {
                     if (widget.title == 'Detect Color') {
                       return ColorDetectionScreen(image: image!);
                     } else if (widget.title == 'Measure Angle') {
-                      return AngleEstimatonScreen(image: image!);
+                      return AngleEstimationScreen(image: image!);
                     } else {
                       return ImageOutput(
                         image: image,
