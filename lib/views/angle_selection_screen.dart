@@ -22,6 +22,7 @@ class AngleEstimatonScreen extends StatefulWidget {
 
 class _AngleEstimationScreenState extends State<AngleEstimatonScreen> {
   bool pointSelected = false;
+
   final picker = ImagePicker();
   int index = 0;
   List<int> intArr = [-1, -1, -1, -1, -1, -1];
@@ -74,36 +75,35 @@ class _AngleEstimationScreenState extends State<AngleEstimatonScreen> {
       try {
         await createPost(route, body: newPost.toMap())
             .timeout(const Duration(seconds: 100));
-        setState(() {
-          showModalBottomSheet(
-              context: context,
-              builder: (context) {
-                return Container(
-                  color: const Color(0xFF737373),
-                  child: Container(
-                    height: 120,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).canvasColor,
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        topRight: Radius.circular(10),
-                      ),
-                    ),
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text(
-                            "Estimated angle is: " + angleEstimated,
-                            style: Theme.of(context).textTheme.headline5,
-                          ),
-                        ],
-                      ),
+
+        showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return Container(
+                color: const Color(0xFF737373),
+                child: Container(
+                  height: 120,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).canvasColor,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10),
                     ),
                   ),
-                );
-              });
-        });
+                  child: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          "Estimated angle is: " + angleEstimated,
+                          style: Theme.of(context).textTheme.headline5,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            });
       } on TimeoutException {
         //print(e.toString());
 
@@ -159,6 +159,7 @@ class _AngleEstimationScreenState extends State<AngleEstimatonScreen> {
   @override
   Widget build(BuildContext context) {
     pointSelected = false;
+    print(pointSelected);
     // print("Next point: " + index.toString());
     // print(intArr);
     return Scaffold(
@@ -198,6 +199,8 @@ class _AngleEstimationScreenState extends State<AngleEstimatonScreen> {
                           },
                           onTapDown: (TapDownDetails details) {
                             pointSelected = true;
+                            print(pointSelected);
+
                             _screenTouched(details, img,
                                 context.findRenderObject() as RenderBox);
                           },
