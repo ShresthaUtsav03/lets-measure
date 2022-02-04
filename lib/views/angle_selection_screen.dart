@@ -26,7 +26,7 @@ class _AngleEstimationScreenState extends State<AngleEstimationScreen> {
   final picker = ImagePicker();
   int index = 0;
   List<int> intArr = [-1, -1, -1, -1, -1, -1];
-  static final route = kApiUrl + 'angledetector';
+  String route = kApiUrl + 'angledetector';
   String angleEstimated = "";
 
   Positioned dropper = const Positioned(
@@ -142,10 +142,10 @@ class _AngleEstimationScreenState extends State<AngleEstimationScreen> {
         }
         final resJson = json.decode(response.body);
         //print(resJson['angle_value']);
-        angleEstimated = resJson['angle_value'].toString();
+        angleEstimated = resJson['angle_value'];
         message = resJson['message'];
         print(message);
-        return Post.fromJson(resJson);
+        return;
       });
     } catch (e) {
       showErrorDialog(context, angleEstimated);
