@@ -61,9 +61,14 @@ class _AngleEstimationScreenState extends State<AngleEstimationScreen> {
 
   Future<void> _nextPointSelection() async {
     if (intArr[5] == -1) {
-      setState(() {
-        index = index + 2;
-      });
+      if (intArr[index] != -1) {
+        Fluttertoast.showToast(msg: "Point selected");
+        setState(() {
+          index = index + 2;
+        });
+      } else {
+        Fluttertoast.showToast(msg: "New point not selected");
+      }
     } else {
       Post newPost = Post(
           coordX1: intArr[0].toString(),
@@ -167,8 +172,8 @@ class _AngleEstimationScreenState extends State<AngleEstimationScreen> {
   Widget build(BuildContext context) {
     pointSelected = false;
     print(pointSelected);
-    // print("Next point: " + index.toString());
-    // print(intArr);
+    print("Next point: " + index.toString());
+    print(intArr);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Angle Estimation'),
@@ -185,7 +190,6 @@ class _AngleEstimationScreenState extends State<AngleEstimationScreen> {
             ],
           ),
           onPressed: () async {
-            Fluttertoast.showToast(msg: "Point selected");
             _nextPointSelection();
           }),
       body: Column(
