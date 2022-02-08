@@ -70,7 +70,7 @@ class _ImageOutputState extends State<ImageOutput> {
       request.headers.addAll(headers);
       //print("request: " + request.toString());
       final response =
-          await request.send().timeout(const Duration(seconds: 70));
+          await request.send().timeout(const Duration(seconds: 90));
       loading = false;
       http.Response res = await http.Response.fromStream(response)
           .timeout(const Duration(seconds: 100));
@@ -89,13 +89,14 @@ class _ImageOutputState extends State<ImageOutput> {
               print("Aruco marker could not be detected!");
               break;
             case 0:
-              showErrorDialog(context, "No object could be detected!");
+              showErrorDialog(context, "No stated object could be detected!");
               print("No object could be detected!");
               break;
             default:
               print("Objects detected!");
+              displayResponseImage();
           }
-          displayResponseImage();
+
           break;
         default:
           showErrorDialog(context, message);
